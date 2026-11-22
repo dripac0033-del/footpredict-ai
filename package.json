@@ -1,0 +1,24 @@
+{
+  "name": "footpredict-ai",
+  "version": "1.0.0",
+  "description": "Progressive Web App (PWA) for Football Match Predictions, Corners Intelligence, and Tactical Pros & Cons",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 server.py",
+    "serve": "python3 server.py",
+    "build": "node build.js",
+    "bundle": "node build.js"
+  },
+  "keywords": [
+    "football",
+    "soccer",
+    "predictions",
+    "corners",
+    "poisson",
+    "pwa",
+    "web-app"
+  ],
+  "author": "FootPredict Team",
+  "license": "MIT"
+}

@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FootPredict AI | منصة التوقعات والتحليلات الكروية الذكية</title>
+  
+  <!-- PWA & Mobile Web App Meta -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#10b981">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FootPredict AI">
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+              dark: '#0b0f19',
+              card: '#131b2e',
+              border: '#1e293b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #080d1a;
+      color: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .glass-card {
+      background: rgba(19, 27, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glow-green {
+      box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-gradient-to-r from-emerald-950 via-emerald-800 to-slate-900 text-xs py-1.5 px-4 text-center border-b border-emerald-700/30 flex items-center justify-center gap-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+    <span class="text-emerald-200 font-semibold">محرك الذكاء الاصطناعي والنماذج الإحصائية (Dixon-Coles & Poisson) مفعل ومحدث لحظياً</span>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-brand-card/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-white text-xl">
+          <i class="fa-solid fa-futbol"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold text-white tracking-wide flex items-center gap-2">
+            FootPredict <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">PRO AI</span>
+          </h1>
+          <p class="text-xs text-slate-400">تحليل المباريات، توقع الفائز، والركنيات، والسلبيات والإيجابيات</p>
+        </div>
+      </div>
+
+      <!-- Search & Date Selector -->
+      <div class="flex items-center gap-2 flex-grow sm:flex-grow-0">
+        <div class="relative w-full sm:w-64">
+          <input type="text" id="searchInput" placeholder="ابحث عن فريق (برشلونة، ريال...)"
+            class="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-3 py-1.5 pl-9 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+          <button id="searchBtn" class="absolute left-2.5 top-2 text-slate-400 hover:text-emerald-400">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Date selector buttons -->
+        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700/80 rounded-xl p-1 text-xs">
+          <button onclick="setSpecificDay(-1)" id="day-yesterday" class="px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition">أمس</button>
+          <button onclick="setSpecificDay(0)" id="day-today" class="px-2.5 py-1 font-bold text-white bg-emerald-600 rounded-lg transition">اليوم</button>
+          <button onclick="setSpecificDay(1)" id="day-tomorrow" class="px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition">غداً</button>
+          <button onclick="setSpecificDay(2)" id="day-after" class="px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition">بعد غد</button>
+          <input type="date" id="customDatePicker" onchange="onCustomDatePick(this)" class="bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-[11px] text-slate-300 focus:outline-none">
+        </div>
+
+        <!-- PWA Install Button -->
+        <button id="pwaInstallBtn" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/30 transition">
+          <i class="fa-solid fa-download"></i>
+          <span class="hidden sm:inline">تثبيت التطبيق</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Leagues Navigation Bar -->
+    <div class="border-t border-slate-800/80 bg-slate-950/60">
+      <div class="max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 overflow-x-auto custom-scrollbar" id="leaguesNav">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+
+    <!-- Hero / Top Daily AI Recommendations -->
+    <section id="topRecommendationsSection" class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-6 bg-emerald-500 rounded-full"></span>
+          <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            🔥 أقوى ترشيحات وتوقعات اليوم (Top Smart Picks)
+          </h2>
+        </div>
+        <span class="text-xs text-slate-400" id="totalScannedLabel">مبنية على فحص كافة البطولات</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="topPicksContainer">
+        <!-- Rendered by JS -->
+        <div class="animate-pulse bg-brand-card rounded-xl p-4 h-36 border border-slate-800"></div>
+        <div class="animate-pulse bg-brand-card rounded-xl p-4 h-36 border border-slate-800"></div>
+        <div class="animate-pulse bg-brand-card rounded-xl p-4 h-36 border border-slate-800"></div>
+      </div>
+    </section>
+
+    <!-- Matches Section -->
+    <section class="space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <span id="currentLeagueFlag" class="text-2xl">🇪🇸</span>
+          <div>
+            <h2 id="currentLeagueTitle" class="text-lg font-bold text-white">الدوري الإسباني (La Liga)</h2>
+            <p id="matchesCountLabel" class="text-xs text-slate-400">جاري تحميل المباريات...</p>
+          </div>
+        </div>
+
+        <!-- Filter tabs: All / Live / High Confidence -->
+        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700/80 p-1 rounded-lg text-xs">
+          <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1 rounded bg-emerald-600 text-white font-bold transition">الكل</button>
+          <button onclick="setFilter('live')" id="filter-live" class="px-3 py-1 rounded text-slate-400 hover:text-white transition">مباشر الآن 🔴</button>
+          <button onclick="setFilter('safe')" id="filter-safe" class="px-3 py-1 rounded text-slate-400 hover:text-white transition">أعلى ثقة ⭐</button>
+        </div>
+      </div>
+
+      <!-- Matches Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="matchesContainer">
+        <!-- Matches cards injected via JS -->
+      </div>
+
+      <!-- No Matches State -->
+      <div id="noMatchesState" class="hidden text-center py-12 bg-brand-card/50 rounded-2xl border border-slate-800 space-y-3">
+        <div class="w-16 h-16 mx-auto rounded-full bg-slate-800/80 flex items-center justify-center text-slate-500 text-2xl">
+          <i class="fa-regular fa-calendar-xmark"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-300">لا توجد مباريات مجدولة في هذا التاريخ لهذه البطولة</h3>
+        <p class="text-xs text-slate-500">جرب اختيار تاريخ آخر من الأعلى أو التبديل إلى دوري آخر مثل دوري أبطال أوروبا أو الدوري الإنجليزي.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Detailed Analysis Modal -->
+  <div id="analysisModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm hidden">
+    <div class="bg-brand-card border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
+      
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/80">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-base">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white" id="modalTitle">التحليل الرياضي والتكتيكي الشامل</h3>
+            <span class="text-xs text-emerald-400 font-semibold" id="modalSubTitle">تحليل الذكاء الاصطناعي والنماذج الإحصائية</span>
+          </div>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-6 text-sm" id="modalContent">
+        <!-- Injected via JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-slate-800 bg-brand-card/90 py-5 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-brain text-emerald-500"></i>
+        <span>FootPredict AI System v2.5 - جميع التوقعات مبنية على محاكاة إحصائية وتقديرات xG</span>
+      </div>
+      <div>
+        <span>الخادم المحلي يعمل على المنفذ <code class="text-emerald-400 font-mono">5055</code></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    let currentLeague = "all";
+    let currentDate = new Date();
+    let currentFilter = "all";
+    let loadedMatches = [];
+    let leaguesData = [];
+
+    // Format date as YYYYMMDD
+    function formatDateParam(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}${month}${day}`;
+    }
+
+    function formatDateDisplay(d) {
+      return d.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // Initialize App
+    async function init() {
+      updateDateUI();
+      await loadLeagues();
+      await loadTopPicks();
+      await loadMatches();
+    }
+
+    // Load available leagues
+    async function loadLeagues() {
+      try {
+        const res = await fetch('/api/leagues');
+        const data = await res.json();
+        if (data.status === 'success') {
+          leaguesData = data.leagues;
+          renderLeaguesNav();
+        }
+      } catch (err) {
+        console.error('Error fetching leagues:', err);
+      }
+    }
+
+    function renderLeaguesNav() {
+      const nav = document.getElementById('leaguesNav');
+      nav.innerHTML = leaguesData.map(l => {
+        const active = (l.slug === currentLeague);
+        return `
+          <button onclick="selectLeague('${l.slug}')" 
+            class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+              active 
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-bold' 
+                : 'bg-slate-900/90 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+            }">
+            <span>${l.flag || '⚽'}</span>
+            <span>${l.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectLeague(slug) {
+      currentLeague = slug;
+      renderLeaguesNav();
+      const leagueObj = leaguesData.find(l => l.slug === slug);
+      if (leagueObj) {
+        document.getElementById('currentLeagueFlag').textContent = leagueObj.flag || '⚽';
+        document.getElementById('currentLeagueTitle').textContent = `${leagueObj.name} (${leagueObj.name_en})`;
+      }
+      loadMatches();
+    }
+
+    // Date navigation handlers
+    function setSpecificDay(offset) {
+      const target = new Date();
+      target.setDate(target.getDate() + offset);
+      currentDate = target;
+      updateDateUI();
+      loadMatches();
+      loadTopPicks();
+    }
+
+    function onCustomDatePick(input) {
+      if (input.value) {
+        const parts = input.value.split('-');
+        if (parts.length === 3) {
+          currentDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+          updateDateUI();
+          loadMatches();
+          loadTopPicks();
+        }
+      }
+    }
+
+    function updateDateUI() {
+      const now = new Date();
+      const diffDays = Math.round((currentDate.setHours(0,0,0,0) - now.setHours(0,0,0,0)) / (1000 * 60 * 60 * 24));
+      
+      const pills = [
+        { id: 'day-yesterday', offset: -1 },
+        { id: 'day-today', offset: 0 },
+        { id: 'day-tomorrow', offset: 1 },
+        { id: 'day-after', offset: 2 }
+      ];
+
+      pills.forEach(p => {
+        const el = document.getElementById(p.id);
+        if (el) {
+          if (p.offset === diffDays) {
+            el.className = 'px-2.5 py-1 font-bold text-white bg-emerald-600 rounded-lg shadow-sm shadow-emerald-600/40 transition';
+          } else {
+            el.className = 'px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition';
+          }
+        }
+      });
+
+      // Update native date picker value
+      const datePicker = document.getElementById('customDatePicker');
+      if (datePicker) {
+        const y = currentDate.getFullYear();
+        const m = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const d = String(currentDate.getDate()).padStart(2, '0');
+        datePicker.value = `${y}-${m}-${d}`;
+      }
+    }
+
+    // Load Matches
+    async function loadMatches() {
+      const container = document.getElementById('matchesContainer');
+      const countLabel = document.getElementById('matchesCountLabel');
+      const noMatches = document.getElementById('noMatchesState');
+      
+      container.innerHTML = `
+        <div class="col-span-full py-12 text-center text-slate-400">
+          <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-500 mb-2"></i>
+          <p class="text-xs">جاري جلب المباريات وتحليل الإحصائيات ونماذج الركنيات...</p>
+        </div>
+      `;
+      noMatches.classList.add('hidden');
+
+      try {
+        const dateStr = formatDateParam(currentDate);
+        const res = await fetch(`/api/matches?league=${currentLeague}&date=${dateStr}`);
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+          loadedMatches = data.matches;
+          countLabel.textContent = `${loadedMatches.length} مباراة مجدولة (${formatDateDisplay(currentDate)})`;
+          renderMatches();
+        } else {
+          container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">${data.message}</div>`;
+        }
+      } catch (err) {
+        container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">فشل الاتصال بالخادم. يرجى إعادة المحاولة.</div>`;
+      }
+    }
+
+    function setFilter(type) {
+      currentFilter = type;
+      ['all', 'live', 'safe'].forEach(f => {
+        const btn = document.getElementById(`filter-${f}`);
+        if (f === type) {
+          btn.className = 'px-3 py-1 rounded bg-emerald-600 text-white font-bold transition';
+        } else {
+          btn.className = 'px-3 py-1 rounded text-slate-400 hover:text-white transition';
+        }
+      });
+      renderMatches();
+    }
+
+    function renderMatches() {
+      const container = document.getElementById('matchesContainer');
+      const noMatches = document.getElementById('noMatchesState');
+      
+      let filtered = [...loadedMatches];
+      if (currentFilter === 'live') {
+        filtered = filtered.filter(m => m.is_live);
+      } else if (currentFilter === 'safe') {
+        filtered = filtered.filter(m => m.quick_prediction.confidence >= 55);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        noMatches.classList.remove('hidden');
+        return;
+      }
+      noMatches.classList.add('hidden');
+
+      container.innerHTML = filtered.map(m => {
+        const qp = m.quick_prediction;
+        const homeWonClass = (m.home.score > m.away.score) ? 'text-emerald-400 font-bold' : '';
+        const awayWonClass = (m.away.score > m.home.score) ? 'text-emerald-400 font-bold' : '';
+
+        // Match time formatting
+        let timeStr = "";
+        try {
+          const d = new Date(m.date);
+          timeStr = d.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        } catch(e) {
+          timeStr = m.status_detail;
+        }
+
+        return `
+          <div class="glass-card rounded-2xl p-4 flex flex-col justify-between hover:border-emerald-500/40 transition duration-200 group">
+            
+            <!-- Match Header -->
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-3 border-b border-slate-800/80 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-800 text-[10px] text-emerald-300 font-bold">
+                    ${m.league_flag} ${m.league_name}
+                  </span>
+                  <span class="flex items-center gap-1 font-medium text-[11px] text-slate-400">
+                    <i class="fa-regular fa-clock text-emerald-400"></i> ${timeStr}
+                  </span>
+                </div>
+                ${
+                  m.is_live 
+                    ? `<span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 font-bold border border-red-500/40 animate-pulse text-[10px]">مباشر ${m.status_detail}</span>`
+                    : (m.is_completed 
+                        ? `<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[10px]">انتهت</span>`
+                        : `<span class="px-2 py-0.5 rounded-full bg-slate-800/80 text-emerald-300 text-[10px]">${m.status}</span>`)
+                }
+              </div>
+
+              <!-- Teams & Score / Form -->
+              <div class="space-y-3 my-2">
+                <!-- Home Team -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <img src="${m.home.logo || 'https://via.placeholder.com/32'}" alt="" class="w-7 h-7 object-contain rounded">
+                    <div>
+                      <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition ${homeWonClass}">${m.home.name}</h4>
+                      <span class="text-[10px] text-slate-400">${m.home.record ? 'السجل: ' + m.home.record : 'صاحب الأرض'}</span>
+                    </div>
+                  </div>
+                  <span class="text-base font-extrabold text-white px-2">${m.home.score !== '' ? m.home.score : '-'}</span>
+                </div>
+
+                <!-- Away Team -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <img src="${m.away.logo || 'https://via.placeholder.com/32'}" alt="" class="w-7 h-7 object-contain rounded">
+                    <div>
+                      <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition ${awayWonClass}">${m.away.name}</h4>
+                      <span class="text-[10px] text-slate-400">${m.away.record ? 'السجل: ' + m.away.record : 'الضيف'}</span>
+                    </div>
+                  </div>
+                  <span class="text-base font-extrabold text-white px-2">${m.away.score !== '' ? m.away.score : '-'}</span>
+                </div>
+              </div>
+
+              <!-- Probabilities Bar -->
+              <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5">
+                <div class="flex justify-between text-[11px] font-semibold text-slate-400">
+                  <span class="text-emerald-400">${qp.home_pct}% فوز المضيف</span>
+                  <span class="text-amber-400">${qp.draw_pct}% تعادل</span>
+                  <span class="text-blue-400">${qp.away_pct}% فوز الضيف</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-900 overflow-hidden flex">
+                  <div class="bg-emerald-500 h-full" style="width: ${qp.home_pct}%" title="فوز المضيف ${qp.home_pct}%"></div>
+                  <div class="bg-amber-400 h-full" style="width: ${qp.draw_pct}%" title="تعادل ${qp.draw_pct}%"></div>
+                  <div class="bg-blue-500 h-full" style="width: ${qp.away_pct}%" title="فوز الضيف ${qp.away_pct}%"></div>
+                </div>
+              </div>
+
+              <!-- Prediction Highlights (Winner, HT, Corners, Goals) -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 pt-2">
+                <div class="bg-slate-900/90 rounded-lg p-2 border border-slate-800 flex flex-col justify-center">
+                  <span class="text-[10px] text-slate-400 flex items-center gap-1">
+                    <i class="fa-solid fa-trophy text-amber-400"></i> التوقع الأرجح
+                  </span>
+                  <span class="text-xs font-bold text-emerald-400 truncate mt-0.5">${qp.winner}</span>
+                  <span class="text-[10px] text-slate-500">نهاية: <b class="text-slate-300">${qp.score}</b></span>
+                </div>
+
+                <div class="bg-slate-900/90 rounded-lg p-2 border border-slate-800 flex flex-col justify-center">
+                  <span class="text-[10px] text-slate-400 flex items-center gap-1">
+                    <i class="fa-solid fa-stopwatch text-amber-400"></i> الشوط الأول
+                  </span>
+                  <span class="text-xs font-bold text-amber-300 mt-0.5">${qp.ht_score || '0 - 0'}</span>
+                  <span class="text-[10px] text-slate-500">توقع الشوط 1</span>
+                </div>
+
+                <div class="bg-slate-900/90 rounded-lg p-2 border border-slate-800 flex flex-col justify-center">
+                  <span class="text-[10px] text-slate-400 flex items-center gap-1">
+                    <i class="fa-solid fa-flag text-blue-400"></i> الركنيات
+                  </span>
+                  <span class="text-xs font-bold text-blue-300 mt-0.5">🚩 ${qp.corners_exp}</span>
+                  <span class="text-[10px] text-slate-500">${qp.corners_line}</span>
+                </div>
+
+                <div class="bg-slate-900/90 rounded-lg p-2 border border-slate-800 flex flex-col justify-center">
+                  <span class="text-[10px] text-slate-400 flex items-center gap-1">
+                    <i class="fa-solid fa-futbol text-emerald-400"></i> الأهداف
+                  </span>
+                  <span class="text-xs font-bold text-emerald-300 mt-0.5">${qp.btts_pct >= 52 ? 'BTTS يسجلان' : '+1.5 أهداف'}</span>
+                  <span class="text-[10px] text-slate-500">كلاهما: ${qp.btts_pct}%</span>
+                </div>
+              </div>
+
+              <!-- 1xBet Quick Odds Bar -->
+              <div class="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between bg-slate-950/70 px-2.5 py-1.5 rounded-lg text-[11px]">
+                <span class="flex items-center gap-1 font-bold text-sky-400 text-[10px]">
+                  <i class="fa-solid fa-coins text-sky-400"></i> أسعار 1xBet:
+                </span>
+                <div class="flex items-center gap-2 font-mono text-slate-300 text-[11px]">
+                  <span>1: <b class="text-white">${qp.odd_1 || '1.85'}</b></span>
+                  <span class="text-slate-600">|</span>
+                  <span>X: <b class="text-white">${qp.odd_x || '3.40'}</b></span>
+                  <span class="text-slate-600">|</span>
+                  <span>2: <b class="text-white">${qp.odd_2 || '4.20'}</b></span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Card Action: Open Deep Analysis -->
+            <button onclick="openDeepAnalysis('${m.league_slug}', '${m.id}')"
+              class="w-full mt-4 py-2 px-3 rounded-xl bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 hover:border-emerald-500 transition duration-150">
+              <i class="fa-solid fa-brain text-emerald-400"></i>
+              <span>تحليل مفصل، سلبيات وإيجابيات</span>
+            </button>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Load Top AI Picks Section
+    async function loadTopPicks() {
+      const container = document.getElementById('topPicksContainer');
+      const label = document.getElementById('totalScannedLabel');
+
+      try {
+        const dateStr = formatDateParam(currentDate);
+        const res = await fetch(`/api/top-picks?date=${dateStr}`);
+        const data = await res.json();
+
+        if (data.status === 'success' && (data.safe_picks.length > 0 || data.corner_picks.length > 0)) {
+          label.textContent = `تم فحص ${data.total_scanned} مباراة عبر البطولات الكبرى`;
+          
+          let cards = [];
+          
+          // Safe Win Bet Card
+          if (data.safe_picks.length > 0) {
+            const topSafe = data.safe_picks[0];
+            cards.push(`
+              <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
+                <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">⭐ الرهان الأكثر أماناً</span>
+                <div>
+                  <div class="text-xs text-slate-400 font-medium mb-1">${topSafe.league_flag} ${topSafe.league_name}</div>
+                  <h4 class="text-sm font-bold text-white mb-2">${topSafe.home.name} vs ${topSafe.away.name}</h4>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40">
+                      ${topSafe.quick_prediction.winner}
+                    </span>
+                    <span class="text-xs text-slate-300 font-bold">ثقة: ${topSafe.quick_prediction.confidence}%</span>
+                  </div>
+                </div>
+                <button onclick="openDeepAnalysis('${topSafe.league_slug}', '${topSafe.id}')" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold mt-3 text-right">
+                  عرض التقرير التكتيكي الكامل ←
+                </button>
+              </div>
+            `);
+          }
+
+          // Corner Master Pick Card
+          if (data.corner_picks.length > 0) {
+            const topCorner = data.corner_picks[0];
+            cards.push(`
+              <div class="bg-gradient-to-br from-blue-950/60 to-slate-900 border border-blue-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
+                <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-bold border border-blue-500/40">🚩 أفضل توقع ركنيات</span>
+                <div>
+                  <div class="text-xs text-slate-400 font-medium mb-1">${topCorner.league_flag} ${topCorner.league_name}</div>
+                  <h4 class="text-sm font-bold text-white mb-2">${topCorner.home.name} vs ${topCorner.away.name}</h4>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 font-extrabold border border-blue-500/40">
+                      أكثر من 8.5 ركنيات (معدل ${topCorner.quick_prediction.corners_exp})
+                    </span>
+                  </div>
+                </div>
+                <button onclick="openDeepAnalysis('${topCorner.league_slug}', '${topCorner.id}')" class="text-xs text-blue-400 hover:text-blue-300 font-bold mt-3 text-right">
+                  تفاصيل الركنيات والضغط العالي ←
+                </button>
+              </div>
+            `);
+          }
+
+          // Second Safe / Value Bet Card
+          if (data.safe_picks.length > 1) {
+            const valPick = data.safe_picks[1];
+            cards.push(`
+              <div class="bg-gradient-to-br from-amber-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
+                <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">💎 خيار القيمة العالية</span>
+                <div>
+                  <div class="text-xs text-slate-400 font-medium mb-1">${valPick.league_flag} ${valPick.league_name}</div>
+                  <h4 class="text-sm font-bold text-white mb-2">${valPick.home.name} vs ${valPick.away.name}</h4>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40">
+                      ${valPick.quick_prediction.best_tip ? valPick.quick_prediction.best_tip.selection : valPick.quick_prediction.winner}
+                    </span>
+                    <span class="text-xs text-slate-300 font-bold">ثقة: ${valPick.quick_prediction.confidence}%</span>
+                  </div>
+                </div>
+                <button onclick="openDeepAnalysis('${valPick.league_slug}', '${valPick.id}')" class="text-xs text-amber-400 hover:text-amber-300 font-bold mt-3 text-right">
+                  قراءة التحليل والمواقع ←
+                </button>
+              </div>
+            `);
+          }
+
+          container.innerHTML = cards.join('');
+        } else {
+          container.innerHTML = `
+            <div class="col-span-full bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
+              لا توجد مباريات كبرى كافية في هذا اليوم لتوليد ترشيحات ذهبية. اختر تاريخاً آخر.
+            </div>
+          `;
+        }
+      } catch (err) {
+        container.innerHTML = `<div class="col-span-full text-center text-xs text-slate-500">فشل تحميل التوصيات السريعة</div>`;
+      }
+    }
+
+    // Open Modal Deep Analysis
+    async function openDeepAnalysis(leagueSlug, eventId) {
+      const modal = document.getElementById('analysisModal');
+      const content = document.getElementById('modalContent');
+      const title = document.getElementById('modalTitle');
+      const subtitle = document.getElementById('modalSubTitle');
+
+      modal.classList.remove('hidden');
+      content.innerHTML = `
+        <div class="py-16 text-center text-slate-400">
+          <i class="fa-solid fa-spinner fa-spin text-3xl text-emerald-500 mb-3"></i>
+          <h4 class="text-sm font-bold text-slate-200">جاري بناء التقرير التكتيكي المتقدم...</h4>
+          <p class="text-xs text-slate-500 mt-1">حساب مصفوفة بواسون، توقع الركنيات، نقاط القوة والضعف، وإجماع المواقع الرياضية</p>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`/api/match-analysis?league=${leagueSlug}&eventId=${eventId}`);
+        const resp = await res.json();
+        
+        if (resp.status !== 'success') {
+          content.innerHTML = `<div class="text-center text-red-400 py-12">${resp.message || 'حدث خطأ أثناء جلب التفاصيل.'}</div>`;
+          return;
+        }
+
+        const data = resp.data;
+        const an = data.analytics;
+        const p = an.prediction;
+        const c = an.corners;
+        const pc = an.pros_and_cons;
+        const cs = an.consensus;
+
+        title.textContent = `${data.home_team.displayName} vs ${data.away_team.displayName}`;
+        subtitle.textContent = `${data.league_info.name} • النتيجة التقديرية الأرجح: ${p.expected_score}`;
+
+        content.innerHTML = `
+          <!-- 1. Match Headline & Win Probability (Full Time & Half Time) -->
+          <div class="bg-gradient-to-r from-slate-900 via-brand-card to-slate-900 border border-slate-700/80 rounded-2xl p-4 sm:p-5 space-y-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <!-- Home -->
+              <div class="flex items-center gap-3">
+                <img src="${data.home_team.logo}" class="w-12 h-12 object-contain" alt="">
+                <div>
+                  <h4 class="text-base font-extrabold text-white">${data.home_team.displayName}</h4>
+                  <span class="text-xs text-emerald-400 font-bold">احتمالية الفوز: ${p.probabilities.home_win}%</span>
+                </div>
+              </div>
+
+              <!-- Predicted Score Badge (FT & HT) -->
+              <div class="flex items-center gap-2">
+                <div class="text-center bg-slate-950/80 px-4 py-2 rounded-xl border border-slate-700 shadow-inner">
+                  <span class="text-[10px] text-slate-400 block font-semibold">نتيجة نهاية اللقاء</span>
+                  <span class="text-2xl font-black text-amber-400 tracking-wider">${p.expected_score}</span>
+                  <span class="text-[10px] text-slate-500 block">بديل: ${p.alternative_score}</span>
+                </div>
+                <div class="text-center bg-slate-950/80 px-3 py-2 rounded-xl border border-slate-700 shadow-inner">
+                  <span class="text-[10px] text-slate-400 block font-semibold">الشوط الأول</span>
+                  <span class="text-xl font-black text-emerald-400 tracking-wider">${p.expected_ht_score}</span>
+                  <span class="text-[10px] text-slate-500 block">تعادل: ${p.half_time_probabilities.draw}%</span>
+                </div>
+              </div>
+
+              <!-- Away -->
+              <div class="flex items-center gap-3 flex-row-reverse sm:flex-row">
+                <div class="text-left sm:text-right">
+                  <h4 class="text-base font-extrabold text-white">${data.away_team.displayName}</h4>
+                  <span class="text-xs text-blue-400 font-bold">احتمالية الفوز: ${p.probabilities.away_win}%</span>
+                </div>
+                <img src="${data.away_team.logo}" class="w-12 h-12 object-contain" alt="">
+              </div>
+            </div>
+
+            <!-- Full-time Probability bar -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs text-slate-400 font-bold">
+                <span class="text-emerald-400">${data.home_team.shortDisplayName || data.home_team.displayName} (${p.probabilities.home_win}%)</span>
+                <span class="text-amber-400">تعادل (${p.probabilities.draw}%)</span>
+                <span class="text-blue-400">${data.away_team.shortDisplayName || data.away_team.displayName} (${p.probabilities.away_win}%)</span>
+              </div>
+              <div class="w-full h-3 rounded-full bg-slate-950 overflow-hidden flex">
+                <div class="bg-emerald-500 h-full" style="width: ${p.probabilities.home_win}%"></div>
+                <div class="bg-amber-400 h-full" style="width: ${p.probabilities.draw}%"></div>
+                <div class="bg-blue-500 h-full" style="width: ${p.probabilities.away_win}%"></div>
+              </div>
+            </div>
+
+            <!-- Half-Time Probabilities Breakdown -->
+            <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] text-slate-400">
+              <span class="font-semibold text-slate-300">احتمالات الشوط الأول (HT):</span>
+              <span class="text-emerald-400 font-bold">تقدم المضيف: ${p.half_time_probabilities.home_win}%</span>
+              <span class="text-amber-400 font-bold">تعادل الشوط 1: ${p.half_time_probabilities.draw}%</span>
+              <span class="text-blue-400 font-bold">تقدم الضيف: ${p.half_time_probabilities.away_win}%</span>
+            </div>
+          </div>
+
+          <!-- 2. EXACT SCORE PROBABILITY MATRIX (مصفوفة النتائج الدقيقة الأرجح) -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-amber-500 rounded"></span>
+                <i class="fa-solid fa-bullseye text-amber-400"></i> مصفوفة النتائج الدقيقة الأرجح (Exact Scores Matrix)
+              </h4>
+              <span class="text-xs text-slate-400">محسوبة وفق مصفوفة بواسون التراكمية</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+              ${p.top_exact_scores.map((sc, idx) => `
+                <div class="bg-slate-950/80 p-2.5 rounded-xl border ${idx === 0 ? 'border-amber-500/50 bg-amber-950/20' : 'border-slate-800'} flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-black px-2 py-0.5 rounded ${idx === 0 ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">${sc.score}</span>
+                  </div>
+                  <span class="text-xs font-bold ${idx === 0 ? 'text-amber-400' : 'text-slate-400'}">${sc.probability}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- 3. 1xBET ODDS & VALUE CALCULATOR (حسابات وأسعار 1xBet وحاسبة القيمة) -->
+          <div class="bg-gradient-to-r from-sky-950/60 via-slate-900 to-sky-950/60 border border-sky-500/40 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-sky-400 rounded"></span>
+                <i class="fa-solid fa-coins text-sky-400"></i> حاسبة أسعار 1xBet ومؤشر الرهان ذو القيمة (+EV)
+              </h4>
+              <span class="text-xs text-sky-300 font-bold bg-sky-500/20 px-2.5 py-0.5 rounded-full border border-sky-500/30 font-mono">
+                هامش 1xBet: ${an.onexbet ? an.onexbet.margin_applied : '5.2%'}
+              </span>
+            </div>
+
+            <!-- 1xBet 1X2 & Double Chance Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 font-mono text-center">
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-sans">1 (المستضيف)</span>
+                <b class="text-base text-white mt-1 block">${an.onexbet ? an.onexbet.odds_1x2.home_1 : '1.85'}</b>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-sans">X (التعادل)</span>
+                <b class="text-base text-amber-400 mt-1 block">${an.onexbet ? an.onexbet.odds_1x2.draw_x : '3.40'}</b>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-sans">2 (الضيف)</span>
+                <b class="text-base text-blue-400 mt-1 block">${an.onexbet ? an.onexbet.odds_1x2.away_2 : '4.20'}</b>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-sans">1X (فوز أو تعادل)</span>
+                <b class="text-base text-emerald-400 mt-1 block">${an.onexbet ? an.onexbet.double_chance['1X'] : '1.22'}</b>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-sans">X2 (تعادل أو ضيف)</span>
+                <b class="text-base text-cyan-400 mt-1 block">${an.onexbet ? an.onexbet.double_chance['X2'] : '1.95'}</b>
+              </div>
+              <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                <span class="text-[10px] text-slate-400 block font-sans">+2.5 أهداف</span>
+                <b class="text-base text-purple-400 mt-1 block">${an.onexbet ? an.onexbet.goals_odds.over_2_5 : '2.05'}</b>
+              </div>
+            </div>
+
+            <!-- Value Bets detected -->
+            ${an.onexbet && an.onexbet.value_bets && an.onexbet.value_bets.length > 0 ? `
+              <div class="bg-sky-950/40 border border-sky-500/30 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-fire text-amber-400"></i>
+                  <span class="text-slate-200"><b>رهان القيمة المكتشف (+EV Value vs 1xBet):</b> <span class="text-sky-300 font-bold">${an.onexbet.value_bets[0].market}</span> بسعر <b class="text-white font-mono">${an.onexbet.value_bets[0].odds}</b></span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold font-mono">عائد إحصائي متوقع: ${an.onexbet.value_bets[0].ev}</span>
+              </div>
+            ` : `
+              <div class="bg-slate-950/50 p-2 rounded-xl text-[11px] text-slate-400 flex items-center justify-between">
+                <span>توازن تسعير 1xBet متقارب مع النموذج الاحتمالي، ينصح بأسواق الأهداف أو الفرصة المزدوجة.</span>
+                <span class="text-sky-400 font-bold font-mono">1xBet Certified</span>
+              </div>
+            `}
+          </div>
+
+          <!-- 4. GOALS & BTTS INTELLIGENCE (سوق الأهداف والتسجيل المتبادل) -->
+          <div class="bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-emerald-500 rounded"></span>
+                <i class="fa-solid fa-futbol text-emerald-400"></i> سوق الأهداف والتسجيل المتبادل (Goals & BTTS Analytics)
+              </h4>
+              <span class="text-xs text-emerald-300 font-bold bg-emerald-500/20 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                معدل xG الإجمالي: ${p.goals.total_expected_goals} هدف
+              </span>
+            </div>
+
+            <!-- BTTS & xG Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block">كلا الفريقين يسجل (BTTS)</span>
+                <span class="text-lg font-black ${p.goals.btts_yes_pct >= 50 ? 'text-emerald-400' : 'text-amber-400'} mt-1 block">
+                  ${p.goals.btts_yes_pct >= 50 ? 'نعم (Yes)' : 'لا (No)'} (${p.goals.btts_yes_pct}%)
+                </span>
+                <span class="text-[10px] text-slate-500">احتمال عدم التسجيل: ${p.goals.btts_no_pct}%</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block">أهداف ${data.home_team.displayName} المتوقعة</span>
+                <span class="text-lg font-black text-emerald-400 mt-1 block">${p.goals.lambda_home} هدف</span>
+                <span class="text-[10px] text-slate-500">القوة الهجومية المتوقعة</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-xs text-slate-400 block">أهداف ${data.away_team.displayName} المتوقعة</span>
+                <span class="text-lg font-black text-blue-400 mt-1 block">${p.goals.lambda_away} هدف</span>
+                <span class="text-[10px] text-slate-500">القوة الهجومية للضيف</span>
+              </div>
+            </div>
+
+            <!-- Over / Under Table -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 text-center text-xs">
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+0.5 أهداف</span>
+                <b class="text-white">${p.goals.over_0_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+1.5 أهداف</span>
+                <b class="text-emerald-400">${p.goals.over_1_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+2.5 أهداف</span>
+                <b class="${p.goals.over_2_5_pct >= 50 ? 'text-amber-400' : 'text-slate-300'}">${p.goals.over_2_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+3.5 أهداف</span>
+                <b class="text-slate-300">${p.goals.over_3_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+4.5 أهداف</span>
+                <b class="text-slate-400">${p.goals.over_4_5_pct}%</b>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. CORNERS DEEP ANALYSIS (تحليل الركنيات الشامل والموسع) -->
+          <div class="bg-slate-900/90 border border-blue-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-blue-500 rounded"></span>
+                <i class="fa-solid fa-flag text-blue-400"></i> توقعات الركنيات الشاملة (Corners Intelligence Master)
+              </h4>
+              <span class="text-xs text-blue-300 font-bold bg-blue-500/20 px-2.5 py-0.5 rounded-full border border-blue-500/30">
+                إجمالي متوقع: ${c.expected_total} ركنية
+              </span>
+            </div>
+
+            <!-- Corner Breakdown (Home/Away & 1H/2H) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-[11px] text-slate-400 block">ركنيات ${data.home_team.displayName}</span>
+                <span class="text-lg font-black text-emerald-400 mt-1 block">🚩 ${c.home_corners}</span>
+                <span class="text-[10px] text-slate-500">ضغط طرفي مباشر</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-[11px] text-slate-400 block">ركنيات ${data.away_team.displayName}</span>
+                <span class="text-lg font-black text-blue-400 mt-1 block">🚩 ${c.away_corners}</span>
+                <span class="text-[10px] text-slate-500">هجمات وعرضيات</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-[11px] text-slate-400 block">ركنيات الشوط الأول (1H)</span>
+                <span class="text-lg font-black text-amber-400 mt-1 block">🚩 ${c.first_half_corners}</span>
+                <span class="text-[10px] text-slate-500">~46% من الإجمالي</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center">
+                <span class="text-[11px] text-slate-400 block">ركنيات الشوط الثاني (2H)</span>
+                <span class="text-lg font-black text-teal-400 mt-1 block">🚩 ${c.second_half_corners}</span>
+                <span class="text-[10px] text-slate-500">~54% من الإجمالي</span>
+              </div>
+            </div>
+
+            <!-- Lines Probabilities Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs pt-1">
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+7.5 ركنيات</span>
+                <b class="text-emerald-400">${c.lines.over_7_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+8.5 ركنيات</span>
+                <b class="text-emerald-300">${c.lines.over_8_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+9.5 ركنيات</span>
+                <b class="${c.lines.over_9_5_pct >= 50 ? 'text-amber-400' : 'text-slate-300'}">${c.lines.over_9_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+10.5 ركنيات</span>
+                <b class="text-slate-300">${c.lines.over_10_5_pct}%</b>
+              </div>
+              <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                <span class="text-slate-400 block text-[10px]">+11.5 ركنيات</span>
+                <b class="text-slate-400">${c.lines.over_11_5_pct}%</b>
+              </div>
+            </div>
+
+            <!-- Recommendation & Race Winner -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-blue-950/40 border border-blue-600/30 rounded-xl p-3 text-xs text-blue-200">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-flag text-amber-400 text-sm"></i>
+                <span><b>فائز سباق الركنيات:</b> <span class="text-white font-bold">${c.corner_winner}</span></span>
+              </div>
+              <div class="text-left sm:text-right">
+                <b>التوصية:</b> ${c.recommendation}
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. DISCIPLINE & CARDS (البطاقات والإنذارات والعنف) -->
+          <div class="bg-slate-900/90 border border-amber-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-amber-500 rounded"></span>
+                <i class="fa-solid fa-clone text-amber-400"></i> توقعات البطاقات والانضباط (Cards & Discipline)
+              </h4>
+              <span class="text-xs text-amber-300 font-bold bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                مستوى الاحتكاك: ${an.discipline.intensity_level}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-center">
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-[11px] text-slate-400 block">البطاقات الصفراء المتوقعة</span>
+                <span class="text-lg font-black text-amber-400 mt-1 block">🟨 ${an.discipline.expected_yellow_cards}</span>
+                <span class="text-[10px] text-slate-500">متوسط الإنذارات</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-[11px] text-slate-400 block">احتمال بطاقة حمراء</span>
+                <span class="text-lg font-black text-red-400 mt-1 block">🟥 ${an.discipline.red_card_risk_pct}%</span>
+                <span class="text-[10px] text-slate-500">طرد أو تدخلات خشنة</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-[11px] text-slate-400 block">أكثر من 3.5 بطاقات</span>
+                <span class="text-lg font-black text-slate-200 mt-1 block">${an.discipline.over_3_5_cards_pct}%</span>
+                <span class="text-[10px] text-slate-500">سوق الإنذارات</span>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-[11px] text-slate-400 block">أكثر من 4.5 بطاقات</span>
+                <span class="text-lg font-black text-slate-200 mt-1 block">${an.discipline.over_4_5_cards_pct}%</span>
+                <span class="text-[10px] text-slate-500">مباريات الديربي والضغط</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. PROS & CONS (السلبيات والإيجابيات المفصلة لكل فريق) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Home Team Pros & Cons -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div class="flex items-center gap-2">
+                  <img src="${data.home_team.logo}" class="w-6 h-6 object-contain" alt="">
+                  <h4 class="text-sm font-bold text-white">${pc.home.name} (المستضيف)</h4>
+                </div>
+                <span class="text-[10px] text-emerald-400 font-semibold">شباك نظيفة: ${pc.home.clean_sheets_l5}/5</span>
+              </div>
+
+              <!-- Pros -->
+              <div class="space-y-1.5">
+                <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-circle-check"></i> نقاط القوة والإيجابيات:
+                </span>
+                <ul class="text-xs text-slate-300 space-y-1 pr-3">
+                  ${pc.home.pros.map(pr => `<li class="list-disc leading-relaxed">${pr}</li>`).join('')}
+                </ul>
+              </div>
+
+              <!-- Cons -->
+              <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+                <span class="text-xs font-bold text-red-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-triangle-exclamation"></i> نقاط الضعف والسلبيات:
+                </span>
+                <ul class="text-xs text-slate-300 space-y-1 pr-3">
+                  ${pc.home.cons.map(cn => `<li class="list-disc leading-relaxed text-red-200/90">${cn}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Away Team Pros & Cons -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div class="flex items-center gap-2">
+                  <img src="${data.away_team.logo}" class="w-6 h-6 object-contain" alt="">
+                  <h4 class="text-sm font-bold text-white">${pc.away.name} (الضيف)</h4>
+                </div>
+                <span class="text-[10px] text-blue-400 font-semibold">شباك نظيفة: ${pc.away.clean_sheets_l5}/5</span>
+              </div>
+
+              <!-- Pros -->
+              <div class="space-y-1.5">
+                <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-circle-check"></i> نقاط القوة والإيجابيات:
+                </span>
+                <ul class="text-xs text-slate-300 space-y-1 pr-3">
+                  ${pc.away.pros.map(pr => `<li class="list-disc leading-relaxed">${pr}</li>`).join('')}
+                </ul>
+              </div>
+
+              <!-- Cons -->
+              <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+                <span class="text-xs font-bold text-red-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-triangle-exclamation"></i> نقاط الضعف والسلبيات:
+                </span>
+                <ul class="text-xs text-slate-300 space-y-1 pr-3">
+                  ${pc.away.cons.map(cn => `<li class="list-disc leading-relaxed text-red-200/90">${cn}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 7. 5-WORLD SITES & MATHEMATICAL MODELS (مقارنة 5 نماذج ومواقع عالمية) -->
+          <div class="bg-slate-900/90 border border-amber-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-amber-500 rounded"></span>
+                <i class="fa-solid fa-scale-balanced text-amber-400"></i> مقارنة 5 نماذج ومواقع توقع عالمية (5-Source Benchmark)
+              </h4>
+              <span class="text-xs text-amber-300 font-extrabold bg-amber-500/20 px-3 py-0.5 rounded-full border border-amber-500/30">
+                نسبة إجماع النماذج: ${cs.agreement_rate}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+              ${cs.models.map(m => `
+                <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <h5 class="text-xs font-bold text-slate-200">${m.name}</h5>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">${m.type}</span>
+                    </div>
+                    <span class="text-xs text-emerald-400 font-semibold block mt-1.5">${m.pick}</span>
+                  </div>
+                  <div class="mt-2 pt-2 border-t border-slate-900 flex justify-between items-center text-[11px] text-slate-400">
+                    <span>درجة الثقة:</span>
+                    <b class="text-white">${m.confidence}</b>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- 8. SMART VALUE BETS & RISK MANAGEMENT (إدارة المخاطر وتوصيات القيمة) -->
+          <div class="bg-gradient-to-r from-emerald-950/80 via-slate-900 to-emerald-950/80 border border-emerald-500/40 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-trophy text-amber-400"></i> الخيارات الذكية وتوصيات القيمة (Smart Value Tips & Risk Management)
+              </h4>
+              <span class="text-[10px] text-emerald-400 font-semibold">موصى بها لإدارة رصيدك بذكاء</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+              ${an.smart_tips.map(tip => `
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-emerald-500/20 flex flex-col justify-between space-y-2">
+                  <div>
+                    <span class="text-[10px] text-emerald-400 font-bold block">${tip.category}</span>
+                    <h5 class="text-xs font-extrabold text-white mt-1">${tip.selection}</h5>
+                    <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">${tip.description}</p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-400">
+                    <span>الاحتمال: <b class="text-white font-bold">${tip.odds_prob}</b></span>
+                    <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">موصى به</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+              ${an.smart_tips.map(tip => `
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-emerald-500/20 space-y-1">
+                  <span class="text-[10px] text-slate-400 font-medium block">${tip.type}</span>
+                  <h5 class="text-xs font-extrabold text-emerald-300">${tip.selection}</h5>
+                  <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+                    <span>نسبة الثقة: <b class="text-white">${tip.confidence}</b></span>
+                    <span class="px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400 font-bold">${tip.risk}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+
+      } catch (err) {
+        content.innerHTML = `<div class="text-center text-red-400 py-12">فشل تحميل التقرير التكتيكي للمباراة.</div>`;
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('analysisModal').classList.add('hidden');
+    }
+
+    // Search input handler
+    document.getElementById('searchBtn').addEventListener('click', executeSearch);
+    document.getElementById('searchInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') executeSearch();
+    });
+
+    async function executeSearch() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) {
+        loadMatches();
+        return;
+      }
+      
+      const container = document.getElementById('matchesContainer');
+      container.innerHTML = `
+        <div class="col-span-full py-12 text-center text-slate-400">
+          <i class="fa-solid fa-spinner fa-spin text-2xl text-emerald-500 mb-2"></i>
+          <p class="text-xs">جاري البحث عن "${q}" عبر جميع البطولات...</p>
+        </div>
+      `;
+
+      try {
+        const dateStr = formatDateParam(currentDate);
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&date=${dateStr}`);
+        const data = await res.json();
+        if (data.status === 'success') {
+          loadedMatches = data.matches;
+          document.getElementById('matchesCountLabel').textContent = `نتائج البحث عن "${q}": ${loadedMatches.length} مباراة`;
+          renderMatches();
+        }
+      } catch (err) {
+        container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">فشل إجراء البحث.</div>`;
+      }
+    }
+
+    // Start
+    window.addEventListener('DOMContentLoaded', () => {
+      init();
+
+      // Register Service Worker for PWA Web App
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('PWA ServiceWorker registered successfully:', reg.scope))
+          .catch(err => console.log('ServiceWorker registration failed:', err));
+      }
+
+      // Handle PWA Install Prompt
+      let deferredPrompt = null;
+      const installBtn = document.getElementById('pwaInstallBtn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installBtn) {
+          installBtn.classList.remove('hidden');
+          installBtn.classList.add('flex');
+        }
+      });
+
+      if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to install prompt: ${outcome}`);
+            deferredPrompt = null;
+            installBtn.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
