@@ -6,14 +6,17 @@
   <title>FootPredict AI | منصة التوقعات والتحليلات الكروية الذكية</title>
   
   <!-- PWA & Mobile Web App Meta -->
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#10b981">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="FootPredict AI">
-  <link rel="icon" type="image/svg+xml" href="/logo.svg">
-  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="./logo.svg">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+  <!-- Client-side Standalone Engine (For 100% Offline & GitHub Pages) -->
+  <script src="./client-engine.js"></script>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -264,13 +267,28 @@
     async function loadLeagues() {
       try {
         const res = await fetch('/api/leagues');
-        const data = await res.json();
-        if (data.status === 'success') {
-          leaguesData = data.leagues;
-          renderLeaguesNav();
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'success' && data.leagues && data.leagues.length > 0) {
+            leaguesData = data.leagues;
+            renderLeaguesNav();
+            return;
+          }
         }
       } catch (err) {
-        console.error('Error fetching leagues:', err);
+        console.warn('API leagues unavailable, falling back to client leagues');
+      }
+
+      // Standalone Fallback for GitHub Pages:
+      if (typeof CLIENT_LEAGUES !== 'undefined') {
+        leaguesData = Object.keys(CLIENT_LEAGUES).map(k => ({
+          slug: k,
+          name: CLIENT_LEAGUES[k].name,
+          name_en: CLIENT_LEAGUES[k].name_en,
+          flag: CLIENT_LEAGUES[k].flag,
+          country: CLIENT_LEAGUES[k].country
+        }));
+        renderLeaguesNav();
       }
     }
 
@@ -371,21 +389,32 @@
       `;
       noMatches.classList.add('hidden');
 
+      const dateStr = formatDateParam(currentDate);
+
       try {
-        const dateStr = formatDateParam(currentDate);
         const res = await fetch(`/api/matches?league=${currentLeague}&date=${dateStr}`);
-        const data = await res.json();
-        
-        if (data.status === 'success') {
-          loadedMatches = data.matches;
-          countLabel.textContent = `${loadedMatches.length} مباراة مجدولة (${formatDateDisplay(currentDate)})`;
-          renderMatches();
-        } else {
-          container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">${data.message}</div>`;
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'success' && Array.isArray(data.matches) && data.matches.length > 0) {
+            loadedMatches = data.matches;
+            countLabel.textContent = `${loadedMatches.length} مباراة (${formatDateDisplay(currentDate)})`;
+            renderMatches();
+            return;
+          }
         }
       } catch (err) {
-        container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">فشل الاتصال بالخادم. يرجى إعادة المحاولة.</div>`;
+        console.warn('API matches unavailable, falling back to client engine');
       }
+
+      // Standalone Fallback for GitHub Pages & Offline:
+      if (typeof clientGenerateFixtures === 'function') {
+        loadedMatches = clientGenerateFixtures(currentLeague, dateStr);
+        countLabel.textContent = `${loadedMatches.length} مباراة (${formatDateDisplay(currentDate)})`;
+        renderMatches();
+        return;
+      }
+
+      container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">لا توجد مباريات متاحة حالياً.</div>`;
     }
 
     function setFilter(type) {
@@ -560,99 +589,121 @@
       }).join('');
     }
 
-    // Load Top AI Picks Section
-    async function loadTopPicks() {
+    // Render Top Picks Cards
+    function renderTopPicksUI(data) {
       const container = document.getElementById('topPicksContainer');
       const label = document.getElementById('totalScannedLabel');
 
-      try {
-        const dateStr = formatDateParam(currentDate);
-        const res = await fetch(`/api/top-picks?date=${dateStr}`);
-        const data = await res.json();
-
-        if (data.status === 'success' && (data.safe_picks.length > 0 || data.corner_picks.length > 0)) {
-          label.textContent = `تم فحص ${data.total_scanned} مباراة عبر البطولات الكبرى`;
-          
-          let cards = [];
-          
-          // Safe Win Bet Card
-          if (data.safe_picks.length > 0) {
-            const topSafe = data.safe_picks[0];
-            cards.push(`
-              <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
-                <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">⭐ الرهان الأكثر أماناً</span>
-                <div>
-                  <div class="text-xs text-slate-400 font-medium mb-1">${topSafe.league_flag} ${topSafe.league_name}</div>
-                  <h4 class="text-sm font-bold text-white mb-2">${topSafe.home.name} vs ${topSafe.away.name}</h4>
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40">
-                      ${topSafe.quick_prediction.winner}
-                    </span>
-                    <span class="text-xs text-slate-300 font-bold">ثقة: ${topSafe.quick_prediction.confidence}%</span>
-                  </div>
+      if (data && (data.safe_picks && data.safe_picks.length > 0 || data.corner_picks && data.corner_picks.length > 0)) {
+        label.textContent = `تم فحص ${data.total_scanned || 12} مباراة عبر البطولات الكبرى`;
+        
+        let cards = [];
+        
+        // Safe Win Bet Card
+        if (data.safe_picks && data.safe_picks.length > 0) {
+          const topSafe = data.safe_picks[0];
+          cards.push(`
+            <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
+              <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">⭐ الرهان الأكثر أماناً</span>
+              <div>
+                <div class="text-xs text-slate-400 font-medium mb-1">${topSafe.league_flag} ${topSafe.league_name}</div>
+                <h4 class="text-sm font-bold text-white mb-2">${topSafe.home.name} vs ${topSafe.away.name}</h4>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40">
+                    ${topSafe.quick_prediction.winner}
+                  </span>
+                  <span class="text-xs text-slate-300 font-bold">ثقة: ${topSafe.quick_prediction.confidence}%</span>
                 </div>
-                <button onclick="openDeepAnalysis('${topSafe.league_slug}', '${topSafe.id}')" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold mt-3 text-right">
-                  عرض التقرير التكتيكي الكامل ←
-                </button>
               </div>
-            `);
-          }
-
-          // Corner Master Pick Card
-          if (data.corner_picks.length > 0) {
-            const topCorner = data.corner_picks[0];
-            cards.push(`
-              <div class="bg-gradient-to-br from-blue-950/60 to-slate-900 border border-blue-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
-                <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-bold border border-blue-500/40">🚩 أفضل توقع ركنيات</span>
-                <div>
-                  <div class="text-xs text-slate-400 font-medium mb-1">${topCorner.league_flag} ${topCorner.league_name}</div>
-                  <h4 class="text-sm font-bold text-white mb-2">${topCorner.home.name} vs ${topCorner.away.name}</h4>
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 font-extrabold border border-blue-500/40">
-                      أكثر من 8.5 ركنيات (معدل ${topCorner.quick_prediction.corners_exp})
-                    </span>
-                  </div>
-                </div>
-                <button onclick="openDeepAnalysis('${topCorner.league_slug}', '${topCorner.id}')" class="text-xs text-blue-400 hover:text-blue-300 font-bold mt-3 text-right">
-                  تفاصيل الركنيات والضغط العالي ←
-                </button>
-              </div>
-            `);
-          }
-
-          // Second Safe / Value Bet Card
-          if (data.safe_picks.length > 1) {
-            const valPick = data.safe_picks[1];
-            cards.push(`
-              <div class="bg-gradient-to-br from-amber-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
-                <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">💎 خيار القيمة العالية</span>
-                <div>
-                  <div class="text-xs text-slate-400 font-medium mb-1">${valPick.league_flag} ${valPick.league_name}</div>
-                  <h4 class="text-sm font-bold text-white mb-2">${valPick.home.name} vs ${valPick.away.name}</h4>
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40">
-                      ${valPick.quick_prediction.best_tip ? valPick.quick_prediction.best_tip.selection : valPick.quick_prediction.winner}
-                    </span>
-                    <span class="text-xs text-slate-300 font-bold">ثقة: ${valPick.quick_prediction.confidence}%</span>
-                  </div>
-                </div>
-                <button onclick="openDeepAnalysis('${valPick.league_slug}', '${valPick.id}')" class="text-xs text-amber-400 hover:text-amber-300 font-bold mt-3 text-right">
-                  قراءة التحليل والمواقع ←
-                </button>
-              </div>
-            `);
-          }
-
-          container.innerHTML = cards.join('');
-        } else {
-          container.innerHTML = `
-            <div class="col-span-full bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
-              لا توجد مباريات كبرى كافية في هذا اليوم لتوليد ترشيحات ذهبية. اختر تاريخاً آخر.
+              <button onclick="openDeepAnalysis('${topSafe.league_slug}', '${topSafe.id}')" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold mt-3 text-right">
+                عرض التقرير التكتيكي الكامل ←
+              </button>
             </div>
-          `;
+          `);
+        }
+
+        // Corner Master Pick Card
+        if (data.corner_picks && data.corner_picks.length > 0) {
+          const topCorner = data.corner_picks[0];
+          cards.push(`
+            <div class="bg-gradient-to-br from-blue-950/60 to-slate-900 border border-blue-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
+              <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-bold border border-blue-500/40">🚩 أفضل توقع ركنيات</span>
+              <div>
+                <div class="text-xs text-slate-400 font-medium mb-1">${topCorner.league_flag} ${topCorner.league_name}</div>
+                <h4 class="text-sm font-bold text-white mb-2">${topCorner.home.name} vs ${topCorner.away.name}</h4>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 font-extrabold border border-blue-500/40">
+                    أكثر من 8.5 ركنيات (معدل ${topCorner.quick_prediction.corners_exp})
+                  </span>
+                </div>
+              </div>
+              <button onclick="openDeepAnalysis('${topCorner.league_slug}', '${topCorner.id}')" class="text-xs text-blue-400 hover:text-blue-300 font-bold mt-3 text-right">
+                تفاصيل الركنيات والضغط العالي ←
+              </button>
+            </div>
+          `);
+        }
+
+        // Second Safe / Value Bet Card
+        if (data.safe_picks && data.safe_picks.length > 1) {
+          const valPick = data.safe_picks[1];
+          cards.push(`
+            <div class="bg-gradient-to-br from-amber-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
+              <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">💎 خيار القيمة العالية</span>
+              <div>
+                <div class="text-xs text-slate-400 font-medium mb-1">${valPick.league_flag} ${valPick.league_name}</div>
+                <h4 class="text-sm font-bold text-white mb-2">${valPick.home.name} vs ${valPick.away.name}</h4>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40">
+                    ${valPick.quick_prediction.best_tip ? valPick.quick_prediction.best_tip.selection : valPick.quick_prediction.winner}
+                  </span>
+                  <span class="text-xs text-slate-300 font-bold">ثقة: ${valPick.quick_prediction.confidence}%</span>
+                </div>
+              </div>
+              <button onclick="openDeepAnalysis('${valPick.league_slug}', '${valPick.id}')" class="text-xs text-amber-400 hover:text-amber-300 font-bold mt-3 text-right">
+                قراءة التحليل والمواقع ←
+              </button>
+            </div>
+          `);
+        }
+
+        container.innerHTML = cards.join('');
+      } else {
+        container.innerHTML = `
+          <div class="col-span-full bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
+            لا توجد مباريات كبرى كافية في هذا اليوم لتوليد ترشيحات ذهبية. اختر تاريخاً آخر.
+          </div>
+        `;
+      }
+    }
+
+    // Load Top AI Picks Section
+    async function loadTopPicks() {
+      const dateStr = formatDateParam(currentDate);
+
+      try {
+        const res = await fetch(`/api/top-picks?date=${dateStr}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'success' && (data.safe_picks.length > 0 || data.corner_picks.length > 0)) {
+            renderTopPicksUI(data);
+            return;
+          }
         }
       } catch (err) {
-        container.innerHTML = `<div class="col-span-full text-center text-xs text-slate-500">فشل تحميل التوصيات السريعة</div>`;
+        console.warn('API top-picks unavailable, falling back to client picks');
+      }
+
+      // Standalone Client Fallback for GitHub Pages:
+      if (typeof clientGenerateFixtures === 'function') {
+        const allMatches = clientGenerateFixtures('all', dateStr);
+        const sortedSafe = [...allMatches].sort((a,b) => b.quick_prediction.confidence - a.quick_prediction.confidence);
+        const sortedCorners = [...allMatches].sort((a,b) => b.quick_prediction.corners_exp - a.quick_prediction.corners_exp);
+        renderTopPicksUI({
+          total_scanned: allMatches.length,
+          safe_picks: sortedSafe.slice(0, 2),
+          corner_picks: sortedCorners.slice(0, 1)
+        });
       }
     }
 
@@ -672,16 +723,41 @@
         </div>
       `;
 
+      let data = null;
       try {
         const res = await fetch(`/api/match-analysis?league=${leagueSlug}&eventId=${eventId}`);
-        const resp = await res.json();
-        
-        if (resp.status !== 'success') {
-          content.innerHTML = `<div class="text-center text-red-400 py-12">${resp.message || 'حدث خطأ أثناء جلب التفاصيل.'}</div>`;
-          return;
+        if (res.ok) {
+          const resp = await res.json();
+          if (resp.status === 'success' && resp.data) {
+            data = resp.data;
+          }
         }
+      } catch (err) {
+        console.warn('API match-analysis unavailable, searching loaded matches');
+      }
 
-        const data = resp.data;
+      // Standalone Fallback for GitHub Pages & Offline:
+      if (!data) {
+        const m = loadedMatches.find(x => x.id === eventId);
+        if (m) {
+          const an = m.client_analytics || (typeof clientCalculateAnalytics === 'function' ? clientCalculateAnalytics(m.home, m.away) : null);
+          if (an) {
+            data = {
+              home_team: { displayName: m.home.name, shortDisplayName: m.home.short_name || m.home.name, logo: m.home.logo },
+              away_team: { displayName: m.away.name, shortDisplayName: m.away.short_name || m.away.name, logo: m.away.logo },
+              league_info: { name: m.league_name, flag: m.league_flag },
+              analytics: an
+            };
+          }
+        }
+      }
+
+      if (!data) {
+        content.innerHTML = `<div class="text-center text-red-400 py-12">تعذر استخراج بيانات التحليل للمباراة.</div>`;
+        return;
+      }
+
+      try {
         const an = data.analytics;
         const p = an.prediction;
         const c = an.corners;
@@ -1119,20 +1195,6 @@
             </div>
           </div>
         `;
-              ${an.smart_tips.map(tip => `
-                <div class="bg-slate-900/90 p-3 rounded-xl border border-emerald-500/20 space-y-1">
-                  <span class="text-[10px] text-slate-400 font-medium block">${tip.type}</span>
-                  <h5 class="text-xs font-extrabold text-emerald-300">${tip.selection}</h5>
-                  <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1">
-                    <span>نسبة الثقة: <b class="text-white">${tip.confidence}</b></span>
-                    <span class="px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400 font-bold">${tip.risk}</span>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-
       } catch (err) {
         content.innerHTML = `<div class="text-center text-red-400 py-12">فشل تحميل التقرير التكتيكي للمباراة.</div>`;
       }

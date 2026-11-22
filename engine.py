@@ -265,9 +265,15 @@ def calculate_match_analytics(home_team: dict, away_team: dict, odds_data: Optio
                 away_clean_sheets = clean_s
 
     # 3. Refined Goal Expectancy (lambda) with Dixon-Coles adjustment
-    base_home_lambda = 1.48
-    base_away_lambda = 1.12
+    base_home_lambda = 1.55
+    base_away_lambda = 1.15
     
+    # Check if direct attack/defense ratings are provided (e.g. Arab leagues or tactical profiles)
+    if "att" in home_team and "def" in away_team:
+        base_home_lambda = (float(home_team["att"]) * float(away_team["def"]) * 0.95) + 0.25
+    if "att" in away_team and "def" in home_team:
+        base_away_lambda = (float(away_team["att"]) * float(home_team["def"]) * 0.85)
+
     win_rate_diff = (home_win_rate - away_win_rate)
     base_home_lambda += win_rate_diff * 0.75
     base_away_lambda -= win_rate_diff * 0.55
@@ -334,8 +340,22 @@ def calculate_match_analytics(home_team: dict, away_team: dict, odds_data: Optio
             "home": sc[0],
             "away": sc[1]
         })
-    expected_score = top_exact_scores[0]["score"]
-    alternative_score = top_exact_scores[1]["score"]
+
+    # Exact Score Selection: Match winner expectation over point density
+    if pct_home >= pct_away + 5.0 and pct_home >= 40.0:
+        win_scores = [sc for sc in sorted_scores if sc[0][0] > sc[0][1]]
+        expected_score = f"{win_scores[0][0][0]} - {win_scores[0][0][1]}" if win_scores else top_exact_scores[0]["score"]
+        alt_win = [sc for sc in win_scores[1:]] if len(win_scores) > 1 else sorted_scores[1:]
+        alternative_score = f"{alt_win[0][0][0]} - {alt_win[0][0][1]}" if alt_win else top_exact_scores[1]["score"]
+    elif pct_away >= pct_home + 5.0 and pct_away >= 38.0:
+        away_scores = [sc for sc in sorted_scores if sc[0][0] < sc[0][1]]
+        expected_score = f"{away_scores[0][0][0]} - {away_scores[0][0][1]}" if away_scores else top_exact_scores[0]["score"]
+        alt_away = [sc for sc in away_scores[1:]] if len(away_scores) > 1 else sorted_scores[1:]
+        alternative_score = f"{alt_away[0][0][0]} - {alt_away[0][0][1]}" if alt_away else top_exact_scores[1]["score"]
+    else:
+        draw_scores = [sc for sc in sorted_scores if sc[0][0] == sc[0][1]]
+        expected_score = f"{draw_scores[0][0][0]} - {draw_scores[0][0][1]}" if draw_scores else top_exact_scores[0]["score"]
+        alternative_score = f"{sorted_scores[1][0][0]} - {sorted_scores[1][0][1]}"
 
     # 5. Half-Time (HT) Probabilities Model
     ht_lambda_home = lambda_home * 0.44
@@ -468,7 +488,7 @@ def calculate_match_analytics(home_team: dict, away_team: dict, odds_data: Optio
 
     bm_home_pct = pct_home
     bm_away_pct = pct_away
-    if odds_data and len(odds_data) > 0:
+    if odds_data and len(odds_data) > 0 and isinstance(odds_data[0], dict):
         spread = odds_data[0].get("spread")
         if spread and spread < 0:
             bm_home_pct = min(86.0, bm_home_pct + 5.0)
