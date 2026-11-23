@@ -421,6 +421,9 @@
     }
 
     function formatAlgeriaTime(dateInput, fallbackDetail) {
+      if (fallbackDetail && (fallbackDetail.includes('انتهت') || fallbackDetail.includes('مباشر') || fallbackDetail.includes('FT'))) {
+        return fallbackDetail;
+      }
       if (!dateInput) return fallbackDetail || 'بتوقيت الجزائر (GMT+1)';
       try {
         const d = new Date(dateInput);
@@ -431,7 +434,7 @@
           minute: '2-digit',
           hour12: false
         });
-        return `${timeStr} بتوقيت الجزائر (GMT+1)`;
+        return `${timeStr} بتوقيت الجزائر`;
       } catch (e) {
         return fallbackDetail || 'بتوقيت الجزائر (GMT+1)';
       }
@@ -604,13 +607,29 @@
       container.innerHTML = `
         <div class="col-span-full py-12 text-center text-slate-400">
           <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-500 mb-2"></i>
-          <p class="text-xs">جاري جلب المباريات وتحليل الإحصائيات ونماذج الركنيات...</p>
+          <p class="text-xs">جاري فحص المباريات الحقيقية وضبط المواعيد بتوقيت الجزائر...</p>
         </div>
       `;
       noMatches.classList.add('hidden');
 
       const dateStr = formatDateParam(currentDate);
 
+      // 1. Live Fetch from ESPN scoreboards & Arab calendars (Works on GitHub Pages & mobile standalone)
+      if (typeof clientFetchRealFixtures === 'function') {
+        try {
+          const liveMatches = await clientFetchRealFixtures(currentLeague, dateStr);
+          if (Array.isArray(liveMatches) && liveMatches.length > 0) {
+            loadedMatches = liveMatches;
+            countLabel.textContent = `${loadedMatches.length} مباراة (${formatDateDisplay(currentDate)})`;
+            renderMatches();
+            return;
+          }
+        } catch (err) {
+          console.warn('clientFetchRealFixtures warning:', err);
+        }
+      }
+
+      // 2. Fallback to server API if running locally
       try {
         const res = await fetch(`/api/matches?league=${currentLeague}&date=${dateStr}`);
         if (res.ok) {
@@ -622,11 +641,9 @@
             return;
           }
         }
-      } catch (err) {
-        console.warn('API matches unavailable, falling back to client engine');
-      }
+      } catch (err) {}
 
-      // Standalone Fallback for GitHub Pages & Offline:
+      // 3. Fallback to clientGenerateFixtures
       if (typeof clientGenerateFixtures === 'function') {
         loadedMatches = clientGenerateFixtures(currentLeague, dateStr);
         countLabel.textContent = `${loadedMatches.length} مباراة (${formatDateDisplay(currentDate)})`;
@@ -634,7 +651,7 @@
         return;
       }
 
-      container.innerHTML = `<div class="col-span-full text-center text-red-400 text-xs py-8">لا توجد مباريات متاحة حالياً.</div>`;
+      container.innerHTML = `<div class="col-span-full text-center text-slate-400 text-xs py-10">لا توجد مباريات رسمية مقررة لهذا اليوم (${formatDateDisplay(currentDate)}). يمكنك تصفح باقي البطولات أو اختيار تاريخ آخر.</div>`;
     }
 
     function setFilter(type) {
@@ -933,11 +950,20 @@
         console.warn('API top-picks unavailable, falling back to client picks');
       }
 
-      // Standalone Client Fallback for GitHub Pages:
-      if (typeof clientGenerateFixtures === 'function') {
-        const allMatches = clientGenerateFixtures('all', dateStr);
-        const sortedSafe = [...allMatches].sort((a,b) => b.quick_prediction.confidence - a.quick_prediction.confidence);
-        const sortedCorners = [...allMatches].sort((a,b) => b.quick_prediction.corners_exp - a.quick_prediction.corners_exp);
+      // Standalone Client: Fetch real matches for dateStr and compute golden picks
+      let allMatches = [];
+      if (typeof clientFetchRealFixtures === 'function') {
+        try {
+          allMatches = await clientFetchRealFixtures('all', dateStr);
+        } catch (e) {}
+      }
+      if (allMatches.length === 0 && typeof clientGenerateFixtures === 'function') {
+        allMatches = clientGenerateFixtures('all', dateStr);
+      }
+
+      if (allMatches.length > 0) {
+        const sortedSafe = [...allMatches].filter(m => m.quick_prediction).sort((a,b) => b.quick_prediction.confidence - a.quick_prediction.confidence);
+        const sortedCorners = [...allMatches].filter(m => m.quick_prediction).sort((a,b) => b.quick_prediction.corners_exp - a.quick_prediction.corners_exp);
         renderTopPicksUI({
           total_scanned: allMatches.length,
           safe_picks: sortedSafe.slice(0, 2),

@@ -10,7 +10,7 @@ import json
 import time
 import urllib.request
 import urllib.error
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 import arab_leagues
 
@@ -833,6 +833,23 @@ def get_matches_for_league(league_slug: str, date_str: Optional[str] = None) -> 
             
             home_score = home.get("score", "")
             away_score = away.get("score", "")
+
+            # Convert UTC date to Africa/Algiers (UTC+1)
+            algeria_time = ""
+            if match_date:
+                try:
+                    clean_dt = match_date.replace("Z", "+00:00")
+                    utc_dt = datetime.fromisoformat(clean_dt)
+                    alg_dt = utc_dt + timedelta(hours=1)
+                    algeria_time = alg_dt.strftime("%H:%M") + " بتوقيت الجزائر"
+                    if is_completed:
+                        status_detail = f"انتهت ({home_score} - {away_score})"
+                    elif is_live:
+                        status_detail = f"مباشر {status_detail} ({home_score} - {away_score})"
+                    else:
+                        status_detail = algeria_time
+                except Exception:
+                    pass
             
             analytics = calculate_match_analytics(home_team_info, away_team_info, odds)
             
