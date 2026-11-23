@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
   <title>FootPredict AI | منصة التوقعات والتحليلات الكروية الذكية</title>
   
   <!-- PWA & Mobile Web App Meta -->
@@ -80,9 +81,12 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- Top Announcement Bar -->
-  <div class="bg-gradient-to-r from-emerald-950 via-emerald-800 to-slate-900 text-xs py-1.5 px-4 text-center border-b border-emerald-700/30 flex items-center justify-center gap-2">
-    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-    <span class="text-emerald-200 font-semibold">محرك الذكاء الاصطناعي والنماذج الإحصائية (Dixon-Coles & Poisson) مفعل ومحدث لحظياً</span>
+  <div class="bg-gradient-to-r from-emerald-950 via-emerald-850 to-slate-900 text-xs py-1.5 px-4 text-center border-b border-emerald-700/40 flex items-center justify-center gap-2">
+    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+    <span class="text-emerald-200 font-extrabold flex items-center gap-1.5">
+      <span>🇩🇿</span> جميع مواعيد المباريات مضبوطة بتوقيت الجزائر (GMT+1)
+    </span>
+    <span class="text-slate-400 hidden sm:inline">• نماذج Dixon-Coles & Poisson ومطابقة أسعار 1xBet محدثة لحظياً</span>
   </div>
 
   <!-- Header -->
@@ -96,15 +100,28 @@
           <h1 class="text-xl font-extrabold text-white tracking-wide flex items-center gap-2">
             FootPredict <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">PRO AI</span>
           </h1>
-          <p class="text-xs text-slate-400">تحليل المباريات، توقع الفائز، والركنيات، والسلبيات والإيجابيات</p>
+          <p class="text-xs text-slate-400">توقعات المباريات، الركنيات، أسعار 1xBet، وتحليل السلبيات والإيجابيات</p>
         </div>
       </div>
 
-      <!-- Search & Date Selector -->
-      <div class="flex items-center gap-2 flex-grow sm:flex-grow-0">
-        <div class="relative w-full sm:w-64">
-          <input type="text" id="searchInput" placeholder="ابحث عن فريق (برشلونة، ريال...)"
-            class="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-3 py-1.5 pl-9 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+      <!-- Action Tools & Date Navigation -->
+      <div class="flex flex-wrap items-center gap-2 flex-grow sm:flex-grow-0 justify-end">
+        <!-- Pro Tools Buttons -->
+        <button onclick="openKellyModal()" class="px-2.5 py-1.5 rounded-lg bg-sky-950 hover:bg-sky-900 border border-sky-500/40 text-sky-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm">
+          <i class="fa-solid fa-calculator text-sky-400"></i>
+          <span>حاسبة كيلي (Bankroll)</span>
+        </button>
+
+        <button onclick="toggleBetSlip()" class="relative px-2.5 py-1.5 rounded-lg bg-emerald-950 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm">
+          <i class="fa-solid fa-receipt text-emerald-400"></i>
+          <span>تذكرة الرهان</span>
+          <span id="betSlipBadge" class="hidden px-1.5 py-0.2 bg-emerald-500 text-slate-950 text-[10px] rounded-full font-black">0</span>
+        </button>
+
+        <!-- Search input -->
+        <div class="relative w-36 sm:w-52">
+          <input type="text" id="searchInput" placeholder="ابحث عن فريق..."
+            class="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-2.5 py-1.5 pl-8 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
           <button id="searchBtn" class="absolute left-2.5 top-2 text-slate-400 hover:text-emerald-400">
             <i class="fa-solid fa-magnifying-glass text-xs"></i>
           </button>
@@ -112,11 +129,11 @@
 
         <!-- Date selector buttons -->
         <div class="flex items-center gap-1 bg-slate-900 border border-slate-700/80 rounded-xl p-1 text-xs">
-          <button onclick="setSpecificDay(-1)" id="day-yesterday" class="px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition">أمس</button>
-          <button onclick="setSpecificDay(0)" id="day-today" class="px-2.5 py-1 font-bold text-white bg-emerald-600 rounded-lg transition">اليوم</button>
-          <button onclick="setSpecificDay(1)" id="day-tomorrow" class="px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition">غداً</button>
-          <button onclick="setSpecificDay(2)" id="day-after" class="px-2.5 py-1 text-slate-400 hover:text-white rounded-lg transition">بعد غد</button>
-          <input type="date" id="customDatePicker" onchange="onCustomDatePick(this)" class="bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-[11px] text-slate-300 focus:outline-none">
+          <button onclick="setSpecificDay(-1)" id="day-yesterday" class="px-2 py-1 text-slate-400 hover:text-white rounded-lg transition text-[11px]">أمس</button>
+          <button onclick="setSpecificDay(0)" id="day-today" class="px-2 py-1 font-bold text-white bg-emerald-600 rounded-lg transition text-[11px]">اليوم</button>
+          <button onclick="setSpecificDay(1)" id="day-tomorrow" class="px-2 py-1 text-slate-400 hover:text-white rounded-lg transition text-[11px]">غداً</button>
+          <button onclick="setSpecificDay(2)" id="day-after" class="px-2 py-1 text-slate-400 hover:text-white rounded-lg transition text-[11px]">بعد غد</button>
+          <input type="date" id="customDatePicker" onchange="onCustomDatePick(this)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[11px] text-slate-300 focus:outline-none">
         </div>
 
         <!-- PWA Install Button -->
@@ -169,11 +186,14 @@
           </div>
         </div>
 
-        <!-- Filter tabs: All / Live / High Confidence -->
-        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700/80 p-1 rounded-lg text-xs">
-          <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1 rounded bg-emerald-600 text-white font-bold transition">الكل</button>
-          <button onclick="setFilter('live')" id="filter-live" class="px-3 py-1 rounded text-slate-400 hover:text-white transition">مباشر الآن 🔴</button>
-          <button onclick="setFilter('safe')" id="filter-safe" class="px-3 py-1 rounded text-slate-400 hover:text-white transition">أعلى ثقة ⭐</button>
+        <!-- Filter tabs: All / Safe / Corners / Goals / BTTS / Live -->
+        <div class="flex flex-wrap items-center gap-1 bg-slate-900 border border-slate-700/80 p-1 rounded-lg text-xs">
+          <button onclick="setFilter('all')" id="filter-all" class="px-2.5 py-1 rounded bg-emerald-600 text-white font-bold transition">الكل</button>
+          <button onclick="setFilter('safe')" id="filter-safe" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">⭐ أمان عالي (+65%)</button>
+          <button onclick="setFilter('corners')" id="filter-corners" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">🚩 ركنيات (+8.5)</button>
+          <button onclick="setFilter('goals')" id="filter-goals" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">⚽ أهداف (+2.5)</button>
+          <button onclick="setFilter('btts')" id="filter-btts" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">🤝 تسجيل الطرفين</button>
+          <button onclick="setFilter('live')" id="filter-live" class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition">🔴 مباشر</button>
         </div>
       </div>
 
@@ -222,6 +242,145 @@
     </div>
   </div>
 
+  <!-- Kelly Criterion Bankroll Calculator Modal -->
+  <div id="kellyModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md hidden animate-fadeIn">
+    <div class="bg-brand-card border border-sky-500/40 rounded-2xl w-full max-w-xl flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-base">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">حاسبة كيلي الذكية لإدارة رأس المال (Kelly Criterion)</h3>
+            <span class="text-xs text-sky-400 font-semibold">حساب القيمة المتوقعة (+EV) وحجم الرهان الرياضي الأمثل</span>
+          </div>
+        </div>
+        <button onclick="closeKellyModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Calculator Inputs & Results -->
+      <div class="p-5 space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">إجمالي رصيد الحساب (Bankroll):</label>
+            <div class="relative">
+              <input type="number" id="kellyBankroll" value="10000" oninput="calculateKelly()"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold focus:outline-none focus:border-sky-500">
+              <span class="absolute left-3 top-2 text-slate-500 font-bold">دج / $</span>
+            </div>
+          </div>
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">كوتة 1xBet (Odds):</label>
+            <input type="number" step="0.05" id="kellyOdds" value="1.85" oninput="calculateKelly()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold focus:outline-none focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">نسبة الاحتمال المقدرة (%):</label>
+            <input type="number" step="1" id="kellyProb" value="62" oninput="calculateKelly()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold focus:outline-none focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">أسلوب التحوط (Fractional Kelly):</label>
+            <select id="kellyFraction" onchange="calculateKelly()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-bold focus:outline-none focus:border-sky-500">
+              <option value="0.5">Half Kelly (50% - موصى به للأمان)</option>
+              <option value="0.25">Quarter Kelly (25% - حماية مشددة)</option>
+              <option value="1.0">Full Kelly (100% - هجومي عالي المخاطر)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Calculated Output Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-400 block">القيمة المتوقعة (+EV)</span>
+            <span id="kellyEvOut" class="text-base font-black text-emerald-400 mt-1 block">+14.7%</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-400 block">نسبة الرهان من الرصيد</span>
+            <span id="kellyPctOut" class="text-base font-black text-sky-400 mt-1 block">8.6%</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-400 block">المبلغ الموصى به</span>
+            <span id="kellyStakeOut" class="text-base font-black text-amber-400 mt-1 block">860 دج</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-400 block">الربح الصافي المحتمل</span>
+            <span id="kellyProfitOut" class="text-base font-black text-teal-400 mt-1 block">731 دج</span>
+          </div>
+        </div>
+
+        <div id="kellyVerdict" class="bg-sky-950/40 border border-sky-500/30 rounded-xl p-3 text-slate-300 leading-relaxed text-[11px]">
+          رهان ذو قيمة إيجابية (+EV). نسبة الرهان محسوبة لتوليد نمو أسي للرصيد مع حمايته من تقلبات الجولات المتتالية.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Bet Slip Drawer -->
+  <div id="betSlipBar" class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 border-t border-sky-500/50 backdrop-blur-md shadow-2xl transition-transform duration-300 translate-y-full">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleBetSlipDetails()" class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+          <i class="fa-solid fa-receipt text-base"></i>
+        </button>
+        <div>
+          <span class="text-white font-extrabold text-sm flex items-center gap-2">
+            تذكرة الرهان التراكمية <span id="slipCountBadge" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs border border-emerald-500/40 font-mono">0</span>
+          </span>
+          <span class="text-slate-400 text-[11px]" id="slipSubSummary">اضغط على زر (+) لإضافة رهانات إلى التذكرة</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block">الكوتة التراكمية (1xBet):</span>
+          <span id="slipTotalOdds" class="text-base font-black text-amber-400 font-mono">1.00</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block">الاحتمال المدمج:</span>
+          <span id="slipCombinedProb" class="text-base font-black text-emerald-400 font-mono">100%</span>
+        </div>
+        <button onclick="toggleBetSlipDetails()" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>عرض التذكرة</span>
+        </button>
+        <button onclick="clearBetSlip()" title="إفراغ التذكرة" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-red-950 text-slate-400 hover:text-red-400 transition">
+          <i class="fa-regular fa-trash-can"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bet Slip Expanded Items Drawer -->
+    <div id="betSlipDetails" class="hidden border-t border-slate-800 max-h-60 overflow-y-auto custom-scrollbar p-4 bg-slate-950/90 text-xs">
+      <div id="betSlipItemsContainer" class="space-y-2 max-w-7xl mx-auto">
+        <!-- Rendered items -->
+      </div>
+      <div class="max-w-7xl mx-auto mt-3 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">مبلغ الرهان:</span>
+          <input type="number" id="slipStakeInput" value="1000" oninput="updateSlipPayout()"
+            class="w-24 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-white font-mono font-bold text-center">
+          <span class="text-slate-400">دج</span>
+          <span class="text-emerald-400 font-bold mr-2">العائد المتوقع: <span id="slipPayoutOut" class="font-mono text-white">0 دج</span></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="copyBetSlip()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition flex items-center gap-1">
+            <i class="fa-regular fa-copy"></i>
+            <span>نسخ التذكرة</span>
+          </button>
+          <button onclick="openKellyForSlip()" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold transition flex items-center gap-1">
+            <i class="fa-solid fa-calculator"></i>
+            <span>حساب رأس المال</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="mt-auto border-t border-slate-800 bg-brand-card/90 py-5 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -242,6 +401,67 @@
     let currentFilter = "all";
     let loadedMatches = [];
     let leaguesData = [];
+    let betSlip = [];
+
+    function showToast(msg, icon = 'fa-circle-check') {
+      let toast = document.getElementById('floatingToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'floatingToast';
+        toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-slate-900/95 border border-emerald-500/50 shadow-2xl backdrop-blur text-xs text-white font-bold flex items-center gap-2 transition-all duration-300 pointer-events-none opacity-0 translate-y-[-10px]';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<i class="fa-solid ${icon} text-emerald-400"></i> <span>${msg}</span>`;
+      toast.classList.remove('opacity-0', 'translate-y-[-10px]');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-[-10px]');
+      }, 2500);
+    }
+
+    function formatAlgeriaTime(dateInput, fallbackDetail) {
+      if (!dateInput) return fallbackDetail || 'بتوقيت الجزائر (GMT+1)';
+      try {
+        const d = new Date(dateInput);
+        if (isNaN(d.getTime())) return fallbackDetail || 'بتوقيت الجزائر (GMT+1)';
+        const timeStr = d.toLocaleTimeString('ar-DZ', {
+          timeZone: 'Africa/Algiers',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+        return `${timeStr} بتوقيت الجزائر (GMT+1)`;
+      } catch (e) {
+        return fallbackDetail || 'بتوقيت الجزائر (GMT+1)';
+      }
+    }
+
+    function generateBadgeSvg(name, bgHex) {
+      const cleanName = (name || 'FC').trim();
+      const initials = cleanName.length <= 4 ? cleanName : cleanName.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase() || cleanName.slice(0, 3).toUpperCase();
+      const color = bgHex || '#10b981';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+        <defs>
+          <linearGradient id="grad_${initials}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:${color};stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M 50 5 L 85 20 L 85 58 C 85 78 50 95 50 95 C 50 95 15 78 15 58 L 15 20 Z" fill="url(#grad_${initials})" stroke="#38bdf8" stroke-width="3"/>
+        <circle cx="50" cy="50" r="30" fill="rgba(15,23,42,0.6)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <text x="50" y="56" fill="#ffffff" font-family="Cairo, Arial, sans-serif" font-weight="900" font-size="20" text-anchor="middle" letter-spacing="1">${initials}</text>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    function getSafeTeamLogo(team, defaultColor) {
+      if (!team) return generateBadgeSvg('FC', defaultColor || '#10b981');
+      if (team.logo && team.logo.trim() !== '') {
+        return team.logo;
+      }
+      return generateBadgeSvg(team.short_name || team.name || 'FC', team.color || defaultColor || '#10b981');
+    }
 
     // Format date as YYYYMMDD
     function formatDateParam(d) {
@@ -419,12 +639,13 @@
 
     function setFilter(type) {
       currentFilter = type;
-      ['all', 'live', 'safe'].forEach(f => {
+      ['all', 'safe', 'corners', 'goals', 'btts', 'live'].forEach(f => {
         const btn = document.getElementById(`filter-${f}`);
+        if (!btn) return;
         if (f === type) {
-          btn.className = 'px-3 py-1 rounded bg-emerald-600 text-white font-bold transition';
+          btn.className = 'px-2.5 py-1 rounded bg-emerald-600 text-white font-bold transition';
         } else {
-          btn.className = 'px-3 py-1 rounded text-slate-400 hover:text-white transition';
+          btn.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white transition';
         }
       });
       renderMatches();
@@ -438,7 +659,13 @@
       if (currentFilter === 'live') {
         filtered = filtered.filter(m => m.is_live);
       } else if (currentFilter === 'safe') {
-        filtered = filtered.filter(m => m.quick_prediction.confidence >= 55);
+        filtered = filtered.filter(m => m.quick_prediction && m.quick_prediction.confidence >= 60);
+      } else if (currentFilter === 'corners') {
+        filtered = filtered.filter(m => m.quick_prediction && m.quick_prediction.corners_exp >= 8.5);
+      } else if (currentFilter === 'goals') {
+        filtered = filtered.filter(m => m.quick_prediction && m.quick_prediction.over25_pct >= 50);
+      } else if (currentFilter === 'btts') {
+        filtered = filtered.filter(m => m.quick_prediction && m.quick_prediction.btts_pct >= 50);
       }
 
       if (filtered.length === 0) {
@@ -453,14 +680,9 @@
         const homeWonClass = (m.home.score > m.away.score) ? 'text-emerald-400 font-bold' : '';
         const awayWonClass = (m.away.score > m.home.score) ? 'text-emerald-400 font-bold' : '';
 
-        // Match time formatting
-        let timeStr = "";
-        try {
-          const d = new Date(m.date);
-          timeStr = d.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-        } catch(e) {
-          timeStr = m.status_detail;
-        }
+        const timeStr = formatAlgeriaTime(m.date, m.status_detail);
+        const homeLogo = getSafeTeamLogo(m.home, m.home.color || '#059669');
+        const awayLogo = getSafeTeamLogo(m.away, m.away.color || '#2563eb');
 
         return `
           <div class="glass-card rounded-2xl p-4 flex flex-col justify-between hover:border-emerald-500/40 transition duration-200 group">
@@ -472,7 +694,7 @@
                   <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-800 text-[10px] text-emerald-300 font-bold">
                     ${m.league_flag} ${m.league_name}
                   </span>
-                  <span class="flex items-center gap-1 font-medium text-[11px] text-slate-400">
+                  <span class="flex items-center gap-1 font-medium text-[11px] text-emerald-400">
                     <i class="fa-regular fa-clock text-emerald-400"></i> ${timeStr}
                   </span>
                 </div>
@@ -490,7 +712,9 @@
                 <!-- Home Team -->
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2.5">
-                    <img src="${m.home.logo || 'https://via.placeholder.com/32'}" alt="" class="w-7 h-7 object-contain rounded">
+                    <img src="${homeLogo}" alt="${m.home.name}" referrerpolicy="no-referrer" loading="lazy"
+                      onerror="this.onerror=null; this.src=generateBadgeSvg('${m.home.short_name || m.home.name}', '${m.home.color || '#059669'}');"
+                      class="w-7 h-7 object-contain rounded">
                     <div>
                       <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition ${homeWonClass}">${m.home.name}</h4>
                       <span class="text-[10px] text-slate-400">${m.home.record ? 'السجل: ' + m.home.record : 'صاحب الأرض'}</span>
@@ -502,7 +726,9 @@
                 <!-- Away Team -->
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2.5">
-                    <img src="${m.away.logo || 'https://via.placeholder.com/32'}" alt="" class="w-7 h-7 object-contain rounded">
+                    <img src="${awayLogo}" alt="${m.away.name}" referrerpolicy="no-referrer" loading="lazy"
+                      onerror="this.onerror=null; this.src=generateBadgeSvg('${m.away.short_name || m.away.name}', '${m.away.color || '#2563eb'}');"
+                      class="w-7 h-7 object-contain rounded">
                     <div>
                       <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition ${awayWonClass}">${m.away.name}</h4>
                       <span class="text-[10px] text-slate-400">${m.away.record ? 'السجل: ' + m.away.record : 'الضيف'}</span>
@@ -577,12 +803,25 @@
 
             </div>
 
-            <!-- Card Action: Open Deep Analysis -->
-            <button onclick="openDeepAnalysis('${m.league_slug}', '${m.id}')"
-              class="w-full mt-4 py-2 px-3 rounded-xl bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 hover:border-emerald-500 transition duration-150">
-              <i class="fa-solid fa-brain text-emerald-400"></i>
-              <span>تحليل مفصل، سلبيات وإيجابيات</span>
-            </button>
+            <!-- Card Actions: Deep Analysis / Add to Slip / Copy -->
+            <div class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800/80">
+              <button onclick="openDeepAnalysis('${m.league_slug}', '${m.id}')"
+                class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-emerald-600 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-700 hover:border-emerald-500 transition duration-150">
+                <i class="fa-solid fa-brain text-emerald-400"></i>
+                <span>التحليل التكتيكي</span>
+              </button>
+              <button onclick="addToBetSlip('${m.id}', '${m.home.name} vs ${m.away.name}', '${qp.winner}', ${qp.odd_1 || 1.85}, '${qp.score}', ${qp.confidence})"
+                title="إضافة إلى تذكرة الرهان"
+                class="py-2 px-3 rounded-xl bg-sky-950/80 hover:bg-sky-600 border border-sky-600/40 text-sky-300 hover:text-white text-xs font-bold flex items-center gap-1 transition">
+                <i class="fa-solid fa-plus"></i>
+                <span class="hidden sm:inline">التذكرة</span>
+              </button>
+              <button onclick="copyMatchSummary('${m.id}')"
+                title="نسخ ملخص التوقع لمشاركته"
+                class="py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
 
           </div>
         `;
@@ -764,16 +1003,46 @@
         const pc = an.pros_and_cons;
         const cs = an.consensus;
 
+        const matchAlgeriaTime = formatAlgeriaTime(data.match_date || new Date());
         title.textContent = `${data.home_team.displayName} vs ${data.away_team.displayName}`;
-        subtitle.textContent = `${data.league_info.name} • النتيجة التقديرية الأرجح: ${p.expected_score}`;
+        subtitle.textContent = `${data.league_info.name} • 🕒 ${matchAlgeriaTime} • النتيجة التقديرية: ${p.expected_score}`;
+
+        const homeLogoUrl = getSafeTeamLogo(data.home_team, data.home_team.color || '#047857');
+        const awayLogoUrl = getSafeTeamLogo(data.away_team, data.away_team.color || '#1d4ed8');
 
         content.innerHTML = `
+          <!-- Action Toolbar: Share, Kelly, Slip -->
+          <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-900/95 border border-slate-800 rounded-2xl text-xs">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30 flex items-center gap-1">
+                <span>🇩🇿</span> ${matchAlgeriaTime}
+              </span>
+              <span class="text-slate-400 hidden sm:inline">إجماع النماذج: <b class="text-amber-400 font-mono">${cs.agreement_rate}</b></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="copyMatchSummary('${eventId}')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition flex items-center gap-1.5 border border-slate-700">
+                <i class="fa-regular fa-copy text-emerald-400"></i>
+                <span>نسخ التقرير</span>
+              </button>
+              <button onclick="openKellyModal(${an.onexbet ? an.onexbet.odds_1x2.home_1 : 1.85}, ${p.confidence})" class="px-3 py-1.5 rounded-lg bg-sky-950 hover:bg-sky-900 text-sky-300 font-bold transition flex items-center gap-1.5 border border-sky-500/40">
+                <i class="fa-solid fa-calculator text-sky-400"></i>
+                <span>حاسبة كيلي</span>
+              </button>
+              <button onclick="addToBetSlip('${eventId}', '${data.home_team.displayName} vs ${data.away_team.displayName}', '${p.winner}', ${an.onexbet ? an.onexbet.odds_1x2.home_1 : 1.85}, '${p.expected_score}', ${p.confidence})" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30">
+                <i class="fa-solid fa-plus"></i>
+                <span>إضافة للتذكرة</span>
+              </button>
+            </div>
+          </div>
+
           <!-- 1. Match Headline & Win Probability (Full Time & Half Time) -->
           <div class="bg-gradient-to-r from-slate-900 via-brand-card to-slate-900 border border-slate-700/80 rounded-2xl p-4 sm:p-5 space-y-4">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
               <!-- Home -->
               <div class="flex items-center gap-3">
-                <img src="${data.home_team.logo}" class="w-12 h-12 object-contain" alt="">
+                <img src="${homeLogoUrl}" referrerpolicy="no-referrer" loading="lazy"
+                  onerror="this.onerror=null; this.src=generateBadgeSvg('${data.home_team.shortDisplayName || data.home_team.displayName}', '${data.home_team.color || '#047857'}');"
+                  class="w-12 h-12 object-contain" alt="">
                 <div>
                   <h4 class="text-base font-extrabold text-white">${data.home_team.displayName}</h4>
                   <span class="text-xs text-emerald-400 font-bold">احتمالية الفوز: ${p.probabilities.home_win}%</span>
@@ -800,7 +1069,9 @@
                   <h4 class="text-base font-extrabold text-white">${data.away_team.displayName}</h4>
                   <span class="text-xs text-blue-400 font-bold">احتمالية الفوز: ${p.probabilities.away_win}%</span>
                 </div>
-                <img src="${data.away_team.logo}" class="w-12 h-12 object-contain" alt="">
+                <img src="${awayLogoUrl}" referrerpolicy="no-referrer" loading="lazy"
+                  onerror="this.onerror=null; this.src=generateBadgeSvg('${data.away_team.shortDisplayName || data.away_team.displayName}', '${data.away_team.color || '#1d4ed8'}');"
+                  class="w-12 h-12 object-contain" alt="">
               </div>
             </div>
 
@@ -824,6 +1095,44 @@
               <span class="text-emerald-400 font-bold">تقدم المضيف: ${p.half_time_probabilities.home_win}%</span>
               <span class="text-amber-400 font-bold">تعادل الشوط 1: ${p.half_time_probabilities.draw}%</span>
               <span class="text-blue-400 font-bold">تقدم الضيف: ${p.half_time_probabilities.away_win}%</span>
+            </div>
+          </div>
+
+          <!-- Tactical Momentum Radar (المقارنة المباشرة والزخم التكتيكي) -->
+          <div class="bg-gradient-to-r from-slate-900 via-brand-card to-slate-900 border border-teal-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-teal-400 rounded"></span>
+                <i class="fa-solid fa-chart-simple text-teal-400"></i> رادار المقارنة المباشرة والزخم التكتيكي (H2H Tactical Radar)
+              </h4>
+              <span class="text-xs text-teal-300 font-bold">${data.home_team.displayName} ⚔️ ${data.away_team.displayName}</span>
+            </div>
+
+            <div class="space-y-3 pt-2">
+              ${(an.tactical_radar || [
+                { label: "القوة الهجومية المتوقعة (xG Attack)", home_val: 78, away_val: 64 },
+                { label: "الصلابة الدفاعية ونظافة الشباك", home_val: 82, away_val: 70 },
+                { label: "ضغط الأطراف وصناعة الركنيات", home_val: 75, away_val: 60 },
+                { label: "معدل الحسم واستغلال الفرص", home_val: 70, away_val: 65 },
+                { label: "مؤشر الفورمة والزخم الأخير", home_val: 80, away_val: 68 }
+              ]).map(item => {
+                const tot = Math.max(1, item.home_val + item.away_val);
+                const hPct = Math.round((item.home_val / tot) * 100);
+                const aPct = 100 - hPct;
+                return `
+                  <div class="space-y-1">
+                    <div class="flex justify-between text-xs font-bold text-slate-300">
+                      <span class="text-emerald-400 font-mono">${item.home_val}%</span>
+                      <span class="text-slate-300 text-[11px] font-sans">${item.label}</span>
+                      <span class="text-blue-400 font-mono">${item.away_val}%</span>
+                    </div>
+                    <div class="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden flex p-0.5 border border-slate-800">
+                      <div class="bg-emerald-500 h-full rounded-r-full" style="width: ${hPct}%"></div>
+                      <div class="bg-blue-500 h-full rounded-l-full" style="width: ${aPct}%"></div>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
             </div>
           </div>
 
@@ -1197,6 +1506,299 @@
         `;
       } catch (err) {
         content.innerHTML = `<div class="text-center text-red-400 py-12">فشل تحميل التقرير التكتيكي للمباراة.</div>`;
+      }
+    }
+
+    // Kelly Criterion Calculator Handlers
+    function openKellyModal(odds, prob) {
+      const modal = document.getElementById('kellyModal');
+      if (odds) document.getElementById('kellyOdds').value = parseFloat(odds).toFixed(2);
+      if (prob) document.getElementById('kellyProb').value = Math.round(prob);
+      if (modal) modal.classList.remove('hidden');
+      calculateKelly();
+    }
+
+    function closeKellyModal() {
+      const modal = document.getElementById('kellyModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function calculateKelly() {
+      const bankroll = parseFloat(document.getElementById('kellyBankroll')?.value) || 10000;
+      const odds = parseFloat(document.getElementById('kellyOdds')?.value) || 1.85;
+      const prob = (parseFloat(document.getElementById('kellyProb')?.value) || 60) / 100;
+      const frac = parseFloat(document.getElementById('kellyFraction')?.value) || 0.5;
+
+      const b = odds - 1;
+      const q = 1 - prob;
+      
+      let fStar = 0;
+      if (b > 0) {
+        fStar = ((b * prob) - q) / b;
+      }
+      
+      const recommendedStakeFrac = Math.max(0, fStar * frac);
+      const stakePct = (recommendedStakeFrac * 100).toFixed(1);
+      const stakeAmount = Math.round(bankroll * recommendedStakeFrac);
+      const netProfit = Math.round(stakeAmount * b);
+      const evPct = (((prob * odds) - 1) * 100).toFixed(1);
+
+      const evEl = document.getElementById('kellyEvOut');
+      const pctEl = document.getElementById('kellyPctOut');
+      const stakeEl = document.getElementById('kellyStakeOut');
+      const profitEl = document.getElementById('kellyProfitOut');
+      const verdictEl = document.getElementById('kellyVerdict');
+
+      if (evEl) {
+        evEl.textContent = (evPct > 0 ? `+${evPct}%` : `${evPct}%`);
+        evEl.className = evPct > 0 ? 'text-base font-black text-emerald-400 mt-1 block' : 'text-base font-black text-red-400 mt-1 block';
+      }
+      if (pctEl) pctEl.textContent = `${stakePct}%`;
+      if (stakeEl) stakeEl.textContent = `${stakeAmount.toLocaleString()} دج`;
+      if (profitEl) profitEl.textContent = `${netProfit.toLocaleString()} دج`;
+
+      if (verdictEl) {
+        if (evPct > 5) {
+          verdictEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 رهان ذو قيمة استثنائية (+EV ${evPct}%):</span> الكوتة أعلى من الاحتمال الرياضي الحقيقي. التحوط بنسبة ${frac*100}% يضمن نمواً متصاعداً مع تقليل تقلبات الجولات.`;
+        } else if (evPct > 0) {
+          verdictEl.innerHTML = `<span class="text-sky-400 font-bold">🔵 رهان متوازن القيمة (+EV ${evPct}%):</span> رهان مناسب للإضافة بحذر إلى تذاكر السحب اليومي.`;
+        } else {
+          verdictEl.innerHTML = `<span class="text-amber-400 font-bold">⚠️ قيمة سالبة (-EV ${evPct}%):</span> الكوتة المقدمة لا تبرر المخاطرة بناءً على حسابات الاحتمالات. يفضل تجنب هذا الرهان أو تقليل الحصة.`;
+        }
+      }
+    }
+
+    // Bet Slip Drawer Handlers
+    function toggleBetSlip() {
+      const bar = document.getElementById('betSlipBar');
+      if (!bar) return;
+      if (bar.classList.contains('translate-y-full')) {
+        bar.classList.remove('translate-y-full');
+      } else {
+        toggleBetSlipDetails();
+      }
+    }
+
+    function toggleBetSlipDetails() {
+      const bar = document.getElementById('betSlipBar');
+      const details = document.getElementById('betSlipDetails');
+      if (bar) bar.classList.remove('translate-y-full');
+      if (details) {
+        details.classList.toggle('hidden');
+      }
+    }
+
+    function addToBetSlip(id, matchName, market, odds, score, prob) {
+      const existingIdx = betSlip.findIndex(item => item.id === id);
+      const numOdds = parseFloat(odds) || 1.85;
+      const numProb = parseInt(prob) || 60;
+      
+      if (existingIdx !== -1) {
+        betSlip[existingIdx] = { id, matchName, market, odds: numOdds, score, prob: numProb };
+        showToast(`تم تحديث رهان: ${matchName}`, 'fa-rotate');
+      } else {
+        betSlip.push({ id, matchName, market, odds: numOdds, score, prob: numProb });
+        showToast(`تمت إضافة ${matchName} إلى التذكرة!`, 'fa-cart-plus');
+      }
+
+      updateBetSlipUI();
+      const bar = document.getElementById('betSlipBar');
+      if (bar) bar.classList.remove('translate-y-full');
+    }
+
+    function removeFromBetSlip(id) {
+      betSlip = betSlip.filter(item => item.id !== id);
+      updateBetSlipUI();
+      showToast('تم حذف الاختيار من التذكرة', 'fa-trash-can');
+    }
+
+    function clearBetSlip() {
+      betSlip = [];
+      updateBetSlipUI();
+      showToast('تم تفريغ التذكرة بالكامل', 'fa-check');
+    }
+
+    function updateBetSlipUI() {
+      const badge = document.getElementById('slipCountBadge');
+      const navBadge = document.getElementById('betSlipBadge');
+      const totalOddsEl = document.getElementById('slipTotalOdds');
+      const combinedProbEl = document.getElementById('slipCombinedProb');
+      const subSummary = document.getElementById('slipSubSummary');
+      const container = document.getElementById('betSlipItemsContainer');
+      const bar = document.getElementById('betSlipBar');
+
+      const count = betSlip.length;
+      if (badge) badge.textContent = count;
+      if (navBadge) {
+        navBadge.textContent = count;
+        if (count > 0) {
+          navBadge.classList.remove('hidden');
+          navBadge.classList.add('inline-flex');
+        } else {
+          navBadge.classList.add('hidden');
+          navBadge.classList.remove('inline-flex');
+        }
+      }
+
+      if (count === 0) {
+        if (totalOddsEl) totalOddsEl.textContent = '1.00';
+        if (combinedProbEl) combinedProbEl.textContent = '100%';
+        if (subSummary) subSummary.textContent = 'اضغط على زر (+) لإضافة رهانات إلى التذكرة';
+        if (container) container.innerHTML = `<p class="text-slate-500 text-center py-4">التذكرة فارغة حالياً. أضف اختيارات من المباريات المعروضة.</p>`;
+        if (bar) bar.classList.add('translate-y-full');
+        const details = document.getElementById('betSlipDetails');
+        if (details) details.classList.add('hidden');
+        updateSlipPayout();
+        return;
+      }
+
+      let totalOdds = 1.0;
+      let combinedProb = 1.0;
+      betSlip.forEach(item => {
+        totalOdds *= item.odds;
+        combinedProb *= (item.prob / 100);
+      });
+      const finalProbPct = Math.max(1, Math.round(combinedProb * 100));
+
+      if (totalOddsEl) totalOddsEl.textContent = totalOdds.toFixed(2);
+      if (combinedProbEl) combinedProbEl.textContent = `${finalProbPct}%`;
+      if (subSummary) subSummary.textContent = `${count} ${count === 1 ? 'مباراة مختارة' : 'مباريات مختارة'} | كوتة إجمالية: ${totalOdds.toFixed(2)}`;
+
+      if (container) {
+        container.innerHTML = betSlip.map((item, idx) => `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500/30 transition">
+            <div class="flex items-center gap-3">
+              <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-[10px]">${idx + 1}</span>
+              <div>
+                <h5 class="font-bold text-white text-xs">${item.matchName}</h5>
+                <div class="flex items-center gap-2 text-[10px] text-slate-400 mt-0.5">
+                  <span class="text-emerald-400 font-semibold">${item.market}</span>
+                  <span>• النتيجة المقدرة: <b class="text-white">${item.score || '--'}</b></span>
+                  <span>• الثقة: <b class="text-slate-300">${item.prob}%</b></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-mono font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20 text-xs">${item.odds.toFixed(2)}</span>
+              <button onclick="removeFromBetSlip('${item.id}')" class="text-slate-500 hover:text-red-400 transition p-1" title="حذف">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      updateSlipPayout();
+    }
+
+    function updateSlipPayout() {
+      const stakeInput = document.getElementById('slipStakeInput');
+      const payoutOut = document.getElementById('slipPayoutOut');
+      if (!stakeInput || !payoutOut) return;
+
+      const stake = parseFloat(stakeInput.value) || 0;
+      let totalOdds = 1.0;
+      betSlip.forEach(item => { totalOdds *= item.odds; });
+      
+      if (betSlip.length === 0) {
+        payoutOut.textContent = '0 دج';
+        return;
+      }
+      const payout = Math.round(stake * totalOdds);
+      payoutOut.textContent = `${payout.toLocaleString()} دج`;
+    }
+
+    function copyBetSlip() {
+      if (betSlip.length === 0) {
+        showToast('التذكرة فارغة!', 'fa-circle-exclamation');
+        return;
+      }
+
+      let totalOdds = 1.0;
+      let combinedProb = 1.0;
+      let lines = [];
+      lines.push('🎫 *تذكرة الرهان التراكمية الذكية - FootPredict AI*');
+      lines.push('🇩🇿 المواعيد بتوقيت الجزائر (GMT+1)');
+      lines.push('----------------------------------------');
+
+      betSlip.forEach((item, i) => {
+        totalOdds *= item.odds;
+        combinedProb *= (item.prob / 100);
+        lines.push(`${i+1}. ⚔️ ${item.matchName}`);
+        lines.push(`   🎯 الترشيح: ${item.market} | الكوتة: ${item.odds.toFixed(2)} | النتيجة: ${item.score || '--'}`);
+      });
+
+      const stake = parseFloat(document.getElementById('slipStakeInput')?.value) || 1000;
+      const payout = Math.round(stake * totalOdds);
+      const probPct = Math.max(1, Math.round(combinedProb * 100));
+
+      lines.push('----------------------------------------');
+      lines.push(`📊 إجمالي الكوتة (1xBet): ${totalOdds.toFixed(2)}`);
+      lines.push(`🎯 نسبة النجاح المجمعة: ${probPct}%`);
+      lines.push(`💰 الرهان: ${stake.toLocaleString()} دج ➔ العائد المتوقع: ${payout.toLocaleString()} دج`);
+      lines.push('');
+      lines.push('📱 ركّب تذكرتك مباشرة عبر: https://dripac0033-del.github.io/footpredict-ai/');
+
+      const fullText = lines.join('\n');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(fullText).then(() => {
+          showToast('تم نسخ التذكرة بالكامل جاهزة للمشاركة!', 'fa-copy');
+        }).catch(() => {
+          fallbackCopy(fullText);
+        });
+      } else {
+        fallbackCopy(fullText);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('تم نسخ التقرير للمشاركة!', 'fa-copy');
+      } catch(e) {
+        showToast('فشل النسخ التلقائي', 'fa-circle-exclamation');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function openKellyForSlip() {
+      if (betSlip.length === 0) {
+        showToast('أضف مباريات إلى التذكرة أولاً!', 'fa-circle-info');
+        return;
+      }
+      let totalOdds = 1.0;
+      let combinedProb = 1.0;
+      betSlip.forEach(item => {
+        totalOdds *= item.odds;
+        combinedProb *= (item.prob / 100);
+      });
+      const probPct = Math.max(1, Math.round(combinedProb * 100));
+      openKellyModal(totalOdds, probPct);
+    }
+
+    function copyMatchSummary(matchId) {
+      const m = loadedMatches.find(item => String(item.id) === String(matchId));
+      if (!m) {
+        showToast('تعذر العثور على بيانات المباراة', 'fa-circle-exclamation');
+        return;
+      }
+
+      const qp = m.quick_prediction || {};
+      const timeStr = formatAlgeriaTime(m.date, m.status_detail);
+      const text = `⚽ *تقرير FootPredict AI التكتيكي*\n🏆 ${m.league_flag || '🌍'} ${m.league_name || ''}\n⚔️ ${m.home.name} vs ${m.away.name}\n⏰ الموعد: ${timeStr}\n🎯 الترشيح: ${qp.winner || 'قيد التحليل'} (الثقة: ${qp.confidence || 60}%)\n🔢 النتيجة المتوقعة: ${qp.score || '1-0'}\n🚩 الركنيات المتوقعة: ${qp.corners_exp ? qp.corners_exp + ' ركنية' : '8+'}\n⚡ كوتة 1xBet: ${qp.odd_1 || 1.85}\n📱 التحليل الشامل: https://dripac0033-del.github.io/footpredict-ai/`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`تم نسخ تقرير مباراة ${m.home.short_name || m.home.name}!`, 'fa-copy');
+        }).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
       }
     }
 

@@ -22,100 +22,108 @@ const CLIENT_LEAGUES = {
 
 const TEAMS_DB = {
   "alg.1": [
-    { id: "alg_mca", name: "مولودية الجزائر", short: "MCA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Mouloudia_Club_d%27Alger.png/150px-Mouloudia_Club_d%27Alger.png", record: "9-2-1", pts: 29, att: 2.2, def: 0.6 },
-    { id: "alg_crb", name: "شباب بلوزداد", short: "CRB", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/63/Chabab_Riadhi_Belouizdad.png/150px-Chabab_Riadhi_Belouizdad.png", record: "7-3-2", pts: 24, att: 1.8, def: 0.8 },
-    { id: "alg_jsk", name: "شبيبة القبائل", short: "JSK", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JS_Kabylie.png/150px-JS_Kabylie.png", record: "7-2-3", pts: 23, att: 1.7, def: 0.9 },
-    { id: "alg_usma", name: "اتحاد الجزائر", short: "USMA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/USM_Alger_logo.png/150px-USM_Alger_logo.png", record: "6-4-2", pts: 22, att: 1.6, def: 0.8 },
-    { id: "alg_ess", name: "وفاق سطيف", short: "ESS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/Entente_Sportive_de_S%C3%A9tif.png/150px-Entente_Sportive_de_S%C3%A9tif.png", record: "6-3-3", pts: 21, att: 1.5, def: 1.0 },
-    { id: "alg_csc", name: "شباب قسنطينة", short: "CSC", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/77/Club_Sportif_Constantinois.png/150px-Club_Sportif_Constantinois.png", record: "5-4-3", pts: 19, att: 1.4, def: 1.1 },
-    { id: "alg_mco", name: "مولودية وهران", short: "MCO", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/68/MC_Oran_logo.png/150px-MC_Oran_logo.png", record: "4-4-4", pts: 16, att: 1.2, def: 1.2 },
-    { id: "alg_pac", name: "نادي بارادو", short: "PAC", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Paradou_AC_logo.png/150px-Paradou_AC_logo.png", record: "4-3-5", pts: 15, att: 1.3, def: 1.4 },
-    { id: "alg_jss", name: "شبيبة الساورة", short: "JSS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/JS_Saoura_logo.png/150px-JS_Saoura_logo.png", record: "4-3-5", pts: 15, att: 1.1, def: 1.2 },
-    { id: "alg_aso", name: "أولمبي الشلف", short: "ASO", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/96/ASO_Chlef.png/150px-ASO_Chlef.png", record: "3-4-5", pts: 13, att: 1.0, def: 1.3 }
+    { id: "alg_mca", name: "مولودية الجزائر", short: "MCA", color: "#047857", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Mouloudia_Club_d%27Alger.png/150px-Mouloudia_Club_d%27Alger.png", record: "9-2-1", pts: 29, att: 2.2, def: 0.6 },
+    { id: "alg_crb", name: "شباب بلوزداد", short: "CRB", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/63/Chabab_Riadhi_Belouizdad.png/150px-Chabab_Riadhi_Belouizdad.png", record: "7-3-2", pts: 24, att: 1.8, def: 0.8 },
+    { id: "alg_jsk", name: "شبيبة القبائل", short: "JSK", color: "#ca8a04", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/JS_Kabylie.png/150px-JS_Kabylie.png", record: "7-2-3", pts: 23, att: 1.7, def: 0.9 },
+    { id: "alg_usma", name: "اتحاد الجزائر", short: "USMA", color: "#b91c1c", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/USM_Alger_logo.png/150px-USM_Alger_logo.png", record: "6-4-2", pts: 22, att: 1.6, def: 0.8 },
+    { id: "alg_ess", name: "وفاق سطيف", short: "ESS", color: "#1e293b", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/Entente_Sportive_de_S%C3%A9tif.png/150px-Entente_Sportive_de_S%C3%A9tif.png", record: "6-3-3", pts: 21, att: 1.5, def: 1.0 },
+    { id: "alg_csc", name: "شباب قسنطينة", short: "CSC", color: "#15803d", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/77/Club_Sportif_Constantinois.png/150px-Club_Sportif_Constantinois.png", record: "5-4-3", pts: 19, att: 1.4, def: 1.1 },
+    { id: "alg_mco", name: "مولودية وهران", short: "MCO", color: "#e11d48", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/68/MC_Oran_logo.png/150px-MC_Oran_logo.png", record: "4-4-4", pts: 16, att: 1.2, def: 1.2 },
+    { id: "alg_pac", name: "نادي بارادو", short: "PAC", color: "#2563eb", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Paradou_AC_logo.png/150px-Paradou_AC_logo.png", record: "4-3-5", pts: 15, att: 1.3, def: 1.4 },
+    { id: "alg_jss", name: "شبيبة الساورة", short: "JSS", color: "#16a34a", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/JS_Saoura_logo.png/150px-JS_Saoura_logo.png", record: "4-3-5", pts: 15, att: 1.1, def: 1.2 },
+    { id: "alg_aso", name: "أولمبي الشلف", short: "ASO", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/96/ASO_Chlef.png/150px-ASO_Chlef.png", record: "3-4-5", pts: 13, att: 1.0, def: 1.3 }
   ],
   "mar.1": [
-    { id: "mar_rca", name: "الرجاء الرياضي", short: "RCA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Raja_Club_Athletic_logo.png/150px-Raja_Club_Athletic_logo.png", record: "8-4-0", pts: 28, att: 2.1, def: 0.6 },
-    { id: "mar_far", name: "الجيش الملكي", short: "ASFAR", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/AS_FAR_logo.png/150px-AS_FAR_logo.png", record: "8-2-2", pts: 26, att: 2.2, def: 0.7 },
-    { id: "mar_wac", name: "الوداد الرياضي", short: "WAC", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Wydad_Athletic_Club_logo.png/150px-Wydad_Athletic_Club_logo.png", record: "7-3-2", pts: 24, att: 1.9, def: 0.8 },
-    { id: "mar_rsb", name: "نهضة بركان", short: "RSB", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/Renaissance_Sportive_de_Berkane.png/150px-Renaissance_Sportive_de_Berkane.png", record: "7-4-1", pts: 25, att: 1.7, def: 0.7 },
-    { id: "mar_fus", name: "الفتح الرباطي", short: "FUS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/23/FUS_de_Rabat_logo.png/150px-FUS_de_Rabat_logo.png", record: "5-4-3", pts: 19, att: 1.4, def: 1.0 },
-    { id: "mar_mas", name: "المغرب الفاسي", short: "MAS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Maghreb_Association_Sportive_de_F%C3%A8s.png/150px-Maghreb_Association_Sportive_de_F%C3%A8s.png", record: "4-5-3", pts: 17, att: 1.2, def: 1.1 }
+    { id: "mar_rca", name: "الرجاء الرياضي", short: "RCA", color: "#059669", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Raja_Club_Athletic_logo.png/150px-Raja_Club_Athletic_logo.png", record: "8-4-0", pts: 28, att: 2.1, def: 0.6 },
+    { id: "mar_far", name: "الجيش الملكي", short: "ASFAR", color: "#991b1b", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/AS_FAR_logo.png/150px-AS_FAR_logo.png", record: "8-2-2", pts: 26, att: 2.2, def: 0.7 },
+    { id: "mar_wac", name: "الوداد الرياضي", short: "WAC", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Wydad_Athletic_Club_logo.png/150px-Wydad_Athletic_Club_logo.png", record: "7-3-2", pts: 24, att: 1.9, def: 0.8 },
+    { id: "mar_rsb", name: "نهضة بركان", short: "RSB", color: "#ea580c", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/Renaissance_Sportive_de_Berkane.png/150px-Renaissance_Sportive_de_Berkane.png", record: "7-4-1", pts: 25, att: 1.7, def: 0.7 },
+    { id: "mar_fus", name: "الفتح الرباطي", short: "FUS", color: "#e11d48", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/23/FUS_de_Rabat_logo.png/150px-FUS_de_Rabat_logo.png", record: "5-4-3", pts: 19, att: 1.4, def: 1.0 },
+    { id: "mar_mas", name: "المغرب الفاسي", short: "MAS", color: "#d97706", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Maghreb_Association_Sportive_de_F%C3%A8s.png/150px-Maghreb_Association_Sportive_de_F%C3%A8s.png", record: "4-5-3", pts: 17, att: 1.2, def: 1.1 }
   ],
   "egy.1": [
-    { id: "egy_ahly", name: "الأهلي المصري", short: "AHL", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Al_Ahly_SC_logo.png/150px-Al_Ahly_SC_logo.png", record: "9-2-0", pts: 29, att: 2.5, def: 0.6 },
-    { id: "egy_pyr", name: "بيراميدز", short: "PYR", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Pyramids_FC_logo.png/150px-Pyramids_FC_logo.png", record: "8-2-1", pts: 26, att: 2.1, def: 0.8 },
-    { id: "egy_zam", name: "الزمالك", short: "ZAM", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/ZamalekSC.png/150px-ZamalekSC.png", record: "7-3-1", pts: 24, att: 1.9, def: 0.9 },
-    { id: "egy_mas", name: "المصري البورسعيدي", short: "MAS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/23/Al_Masry_SC_logo.png/150px-Al_Masry_SC_logo.png", record: "5-4-2", pts: 19, att: 1.4, def: 1.1 },
-    { id: "egy_zed", name: "زد إف سي", short: "ZED", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/ZED_FC_logo.png/150px-ZED_FC_logo.png", record: "5-3-3", pts: 18, att: 1.3, def: 1.0 },
-    { id: "egy_smh", name: "سموحة", short: "SMH", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/Smouha_SC_logo.png/150px-Smouha_SC_logo.png", record: "4-4-3", pts: 16, att: 1.2, def: 1.2 }
+    { id: "egy_ahly", name: "الأهلي المصري", short: "AHL", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Al_Ahly_SC_logo.png/150px-Al_Ahly_SC_logo.png", record: "9-2-0", pts: 29, att: 2.5, def: 0.6 },
+    { id: "egy_pyr", name: "بيراميدز", short: "PYR", color: "#0284c7", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Pyramids_FC_logo.png/150px-Pyramids_FC_logo.png", record: "8-2-1", pts: 26, att: 2.1, def: 0.8 },
+    { id: "egy_zam", name: "الزمالك", short: "ZAM", color: "#e11d48", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/ZamalekSC.png/150px-ZamalekSC.png", record: "7-3-1", pts: 24, att: 1.9, def: 0.9 },
+    { id: "egy_mas", name: "المصري البورسعيدي", short: "MAS", color: "#16a34a", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/23/Al_Masry_SC_logo.png/150px-Al_Masry_SC_logo.png", record: "5-4-2", pts: 19, att: 1.4, def: 1.1 },
+    { id: "egy_zed", name: "زد إف سي", short: "ZED", color: "#ca8a04", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/ZED_FC_logo.png/150px-ZED_FC_logo.png", record: "5-3-3", pts: 18, att: 1.3, def: 1.0 },
+    { id: "egy_smh", name: "سموحة", short: "SMH", color: "#2563eb", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/91/Smouha_SC_logo.png/150px-Smouha_SC_logo.png", record: "4-4-3", pts: 16, att: 1.2, def: 1.2 }
   ],
   "tun.1": [
-    { id: "tun_est", name: "الترجي التونسي", short: "EST", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Esp%C3%A9rance_Sportive_de_Tunis.png/150px-Esp%C3%A9rance_Sportive_de_Tunis.png", record: "8-3-0", pts: 27, att: 2.2, def: 0.5 },
-    { id: "tun_ca", name: "النادي الإفريقي", short: "CA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Club_Africain.png/150px-Club_Africain.png", record: "7-3-1", pts: 24, att: 1.8, def: 0.7 },
-    { id: "tun_ess", name: "النجم الساحلي", short: "ESS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cb/%C3%89toile_Sportive_du_Sahel.png/150px-%C3%89toile_Sportive_du_Sahel.png", record: "6-3-2", pts: 21, att: 1.6, def: 0.8 },
-    { id: "tun_css", name: "النادي الصفاقسي", short: "CSS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/90/Club_Sportif_Sfaxien.png/150px-Club_Sportif_Sfaxien.png", record: "5-4-2", pts: 19, att: 1.5, def: 0.9 },
-    { id: "tun_usm", name: "الاتحاد المنستيري", short: "USM", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Union_Sportive_Monastirienne.png/150px-Union_Sportive_Monastirienne.png", record: "5-3-3", pts: 18, att: 1.4, def: 1.0 }
+    { id: "tun_est", name: "الترجي التونسي", short: "EST", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Esp%C3%A9rance_Sportive_de_Tunis.png/150px-Esp%C3%A9rance_Sportive_de_Tunis.png", record: "8-3-0", pts: 27, att: 2.2, def: 0.5 },
+    { id: "tun_ca", name: "النادي الإفريقي", short: "CA", color: "#e11d48", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Club_Africain.png/150px-Club_Africain.png", record: "7-3-1", pts: 24, att: 1.8, def: 0.7 },
+    { id: "tun_ess", name: "النجم الساحلي", short: "ESS", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cb/%C3%89toile_Sportive_du_Sahel.png/150px-%C3%89toile_Sportive_du_Sahel.png", record: "6-3-2", pts: 21, att: 1.6, def: 0.8 },
+    { id: "tun_css", name: "النادي الصفاقسي", short: "CSS", color: "#334155", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/90/Club_Sportif_Sfaxien.png/150px-Club_Sportif_Sfaxien.png", record: "5-4-2", pts: 19, att: 1.5, def: 0.9 },
+    { id: "tun_usm", name: "الاتحاد المنستيري", short: "USM", color: "#2563eb", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Union_Sportive_Monastirienne.png/150px-Union_Sportive_Monastirienne.png", record: "5-3-3", pts: 18, att: 1.4, def: 1.0 }
   ],
   "ksa.1": [
-    { id: "ksa_hil", name: "الهلال", short: "HIL", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Al_Hilal_SFC_logo.png/150px-Al_Hilal_SFC_logo.png", record: "10-1-0", pts: 31, att: 2.8, def: 0.7 },
-    { id: "ksa_itt", name: "الاتحاد", short: "ITT", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Al-Ittihad_Club_logo.png/150px-Al-Ittihad_Club_logo.png", record: "9-0-2", pts: 27, att: 2.4, def: 0.9 },
-    { id: "ksa_nas", name: "النصر", short: "NAS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Al_Nassr_FC_logo.png/150px-Al_Nassr_FC_logo.png", record: "7-4-0", pts: 25, att: 2.3, def: 1.0 },
-    { id: "ksa_qad", name: "القادسية", short: "QAD", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Al_Qadsiah_FC_logo.png/150px-Al_Qadsiah_FC_logo.png", record: "6-1-4", pts: 19, att: 1.7, def: 1.1 },
-    { id: "ksa_shb", name: "الشباب", short: "SHB", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Al_Shabab_FC_logo.png/150px-Al_Shabab_FC_logo.png", record: "6-1-4", pts: 19, att: 1.6, def: 1.0 },
-    { id: "ksa_ahl", name: "الأهلي السعودي", short: "AHL", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/Al_Ahli_Saudi_FC_logo.png/150px-Al_Ahli_Saudi_FC_logo.png", record: "5-2-4", pts: 17, att: 1.8, def: 1.2 }
+    { id: "ksa_hil", name: "الهلال", short: "HIL", color: "#1d4ed8", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Al_Hilal_SFC_logo.png/150px-Al_Hilal_SFC_logo.png", record: "10-1-0", pts: 31, att: 2.8, def: 0.7 },
+    { id: "ksa_itt", name: "الاتحاد", short: "ITT", color: "#ca8a04", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Al-Ittihad_Club_logo.png/150px-Al-Ittihad_Club_logo.png", record: "9-0-2", pts: 27, att: 2.4, def: 0.9 },
+    { id: "ksa_nas", name: "النصر", short: "NAS", color: "#eab308", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Al_Nassr_FC_logo.png/150px-Al_Nassr_FC_logo.png", record: "7-4-0", pts: 25, att: 2.3, def: 1.0 },
+    { id: "ksa_qad", name: "القادسية", short: "QAD", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Al_Qadsiah_FC_logo.png/150px-Al_Qadsiah_FC_logo.png", record: "6-1-4", pts: 19, att: 1.7, def: 1.1 },
+    { id: "ksa_shb", name: "الشباب", short: "SHB", color: "#334155", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Al_Shabab_FC_logo.png/150px-Al_Shabab_FC_logo.png", record: "6-1-4", pts: 19, att: 1.6, def: 1.0 },
+    { id: "ksa_ahl", name: "الأهلي السعودي", short: "AHL", color: "#15803d", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/Al_Ahli_Saudi_FC_logo.png/150px-Al_Ahli_Saudi_FC_logo.png", record: "5-2-4", pts: 17, att: 1.8, def: 1.2 }
   ],
   "esp.1": [
-    { id: "esp_rma", name: "ريال مدريد", short: "RMA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/150px-Real_Madrid_CF.svg.png", record: "9-3-0", pts: 30, att: 2.6, def: 0.7 },
-    { id: "esp_bar", name: "برشلونة", short: "BAR", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/150px-FC_Barcelona_%28crest%29.svg.png", record: "11-0-2", pts: 33, att: 3.1, def: 0.9 },
-    { id: "esp_atm", name: "أتلتيكو مدريد", short: "ATM", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/150px-Atletico_Madrid_2017_logo.svg.png", record: "7-5-1", pts: 26, att: 1.9, def: 0.6 },
-    { id: "esp_vil", name: "فياريال", short: "VIL", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Villarreal_CF_logo.svg/150px-Villarreal_CF_logo.svg.png", record: "7-3-2", pts: 24, att: 2.0, def: 1.3 },
-    { id: "esp_ath", name: "أتلتيك بيلباو", short: "ATH", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/150px-Club_Athletic_Bilbao_logo.svg.png", record: "6-3-4", pts: 21, att: 1.6, def: 1.0 },
-    { id: "esp_bet", name: "ريال بيتيس", short: "BET", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/13/Real_betis_logo.svg/150px-Real_betis_logo.svg.png", record: "5-5-3", pts: 20, att: 1.4, def: 1.1 }
+    { id: "esp_rma", name: "ريال مدريد", short: "RMA", color: "#d97706", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/150px-Real_Madrid_CF.svg.png", record: "9-3-0", pts: 30, att: 2.6, def: 0.7 },
+    { id: "esp_bar", name: "برشلونة", short: "BAR", color: "#831843", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/150px-FC_Barcelona_%28crest%29.svg.png", record: "11-0-2", pts: 33, att: 3.1, def: 0.9 },
+    { id: "esp_atm", name: "أتلتيكو مدريد", short: "ATM", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/150px-Atletico_Madrid_2017_logo.svg.png", record: "7-5-1", pts: 26, att: 1.9, def: 0.6 },
+    { id: "esp_vil", name: "فياريال", short: "VIL", color: "#eab308", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Villarreal_CF_logo.svg/150px-Villarreal_CF_logo.svg.png", record: "7-3-2", pts: 24, att: 2.0, def: 1.3 },
+    { id: "esp_ath", name: "أتلتيك بيلباو", short: "ATH", color: "#b91c1c", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/150px-Club_Athletic_Bilbao_logo.svg.png", record: "6-3-4", pts: 21, att: 1.6, def: 1.0 },
+    { id: "esp_bet", name: "ريال بيتيس", short: "BET", color: "#15803d", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/13/Real_betis_logo.svg/150px-Real_betis_logo.svg.png", record: "5-5-3", pts: 20, att: 1.4, def: 1.1 }
   ],
   "eng.1": [
-    { id: "eng_liv", name: "ليفربول", short: "LIV", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/150px-Liverpool_FC.svg.png", record: "9-1-1", pts: 28, att: 2.5, def: 0.7 },
-    { id: "eng_mci", name: "مانشستر سيتي", short: "MCI", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/150px-Manchester_City_FC_badge.svg.png", record: "7-2-2", pts: 23, att: 2.7, def: 1.1 },
-    { id: "eng_ars", name: "أرسنال", short: "ARS", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/150px-Arsenal_FC.svg.png", record: "6-4-1", pts: 22, att: 2.2, def: 0.8 },
-    { id: "eng_che", name: "تشيلسي", short: "CHE", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/150px-Chelsea_FC.svg.png", record: "5-4-2", pts: 19, att: 2.1, def: 1.2 },
-    { id: "eng_not", name: "نوتنغهام فورست", short: "NFO", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/150px-Nottingham_Forest_F.C._logo.svg.png", record: "5-4-2", pts: 19, att: 1.5, def: 0.9 },
-    { id: "eng_mun", name: "مانشستر يونايتد", short: "MUN", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/150px-Manchester_United_FC_crest.svg.png", record: "4-3-4", pts: 15, att: 1.5, def: 1.3 }
+    { id: "eng_liv", name: "ليفربول", short: "LIV", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/150px-Liverpool_FC.svg.png", record: "9-1-1", pts: 28, att: 2.5, def: 0.7 },
+    { id: "eng_mci", name: "مانشستر سيتي", short: "MCI", color: "#0284c7", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/150px-Manchester_City_FC_badge.svg.png", record: "7-2-2", pts: 23, att: 2.7, def: 1.1 },
+    { id: "eng_ars", name: "أرسنال", short: "ARS", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/150px-Arsenal_FC.svg.png", record: "6-4-1", pts: 22, att: 2.2, def: 0.8 },
+    { id: "eng_che", name: "تشيلسي", short: "CHE", color: "#1d4ed8", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/150px-Chelsea_FC.svg.png", record: "5-4-2", pts: 19, att: 2.1, def: 1.2 },
+    { id: "eng_not", name: "نوتنغهام فورست", short: "NFO", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/150px-Nottingham_Forest_F.C._logo.svg.png", record: "5-4-2", pts: 19, att: 1.5, def: 0.9 },
+    { id: "eng_mun", name: "مانشستر يونايتد", short: "MUN", color: "#b91c1c", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/150px-Manchester_United_FC_crest.svg.png", record: "4-3-4", pts: 15, att: 1.5, def: 1.3 }
   ],
   "uefa.champions": [
-    { id: "ucl_rma", name: "ريال مدريد", short: "RMA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/150px-Real_Madrid_CF.svg.png", record: "3-0-1", pts: 9, att: 2.7, def: 0.9 },
-    { id: "ucl_bar", name: "برشلونة", short: "BAR", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/150px-FC_Barcelona_%28crest%29.svg.png", record: "3-0-1", pts: 9, att: 3.2, def: 1.0 },
-    { id: "ucl_liv", name: "ليفربول", short: "LIV", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/150px-Liverpool_FC.svg.png", record: "4-0-0", pts: 12, att: 2.6, def: 0.5 },
-    { id: "ucl_bay", name: "بايرن ميونخ", short: "BAY", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/150px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png", record: "2-0-2", pts: 6, att: 2.9, def: 1.1 },
-    { id: "ucl_int", name: "إنتر ميلان", short: "INT", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/150px-FC_Internazionale_Milano_2021.svg.png", record: "3-1-0", pts: 10, att: 2.1, def: 0.4 },
-    { id: "ucl_mci", name: "مانشستر سيتي", short: "MCI", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/150px-Manchester_City_FC_badge.svg.png", record: "2-1-1", pts: 7, att: 2.5, def: 1.0 }
+    { id: "ucl_rma", name: "ريال مدريد", short: "RMA", color: "#d97706", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/150px-Real_Madrid_CF.svg.png", record: "3-0-1", pts: 9, att: 2.7, def: 0.9 },
+    { id: "ucl_bar", name: "برشلونة", short: "BAR", color: "#831843", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/150px-FC_Barcelona_%28crest%29.svg.png", record: "3-0-1", pts: 9, att: 3.2, def: 1.0 },
+    { id: "ucl_liv", name: "ليفربول", short: "LIV", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/150px-Liverpool_FC.svg.png", record: "4-0-0", pts: 12, att: 2.6, def: 0.5 },
+    { id: "ucl_bay", name: "بايرن ميونخ", short: "BAY", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/150px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png", record: "2-0-2", pts: 6, att: 2.9, def: 1.1 },
+    { id: "ucl_int", name: "إنتر ميلان", short: "INT", color: "#1e3a8a", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/150px-FC_Internazionale_Milano_2021.svg.png", record: "3-1-0", pts: 10, att: 2.1, def: 0.4 },
+    { id: "ucl_mci", name: "مانشستر سيتي", short: "MCI", color: "#0284c7", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/150px-Manchester_City_FC_badge.svg.png", record: "2-1-1", pts: 7, att: 2.5, def: 1.0 }
   ],
   "ita.1": [
-    { id: "ita_nap", name: "نابولي", short: "NAP", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/SSC_Neapel.svg/150px-SSC_Neapel.svg.png", record: "8-2-2", pts: 26, att: 2.0, def: 0.7 },
-    { id: "ita_ata", name: "أتالانتا", short: "ATA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/66/AtalantaBC.svg/150px-AtalantaBC.svg.png", record: "8-1-3", pts: 25, att: 2.8, def: 1.1 },
-    { id: "ita_int", name: "إنتر ميلان", short: "INT", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/150px-FC_Internazionale_Milano_2021.svg.png", record: "7-4-1", pts: 25, att: 2.4, def: 1.0 },
-    { id: "ita_juv", name: "يوفنتوس", short: "JUV", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Juventus_FC_2017_logo.svg/150px-Juventus_FC_2017_logo.svg.png", record: "6-6-0", pts: 24, att: 1.8, def: 0.5 },
-    { id: "ita_laz", name: "لاتسيو", short: "LAZ", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/150px-S.S._Lazio_badge.svg.png", record: "8-1-3", pts: 25, att: 2.2, def: 1.2 }
+    { id: "ita_nap", name: "نابولي", short: "NAP", color: "#0284c7", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/SSC_Neapel.svg/150px-SSC_Neapel.svg.png", record: "8-2-2", pts: 26, att: 2.0, def: 0.7 },
+    { id: "ita_ata", name: "أتالانتا", short: "ATA", color: "#1e40af", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/66/AtalantaBC.svg/150px-AtalantaBC.svg.png", record: "8-1-3", pts: 25, att: 2.8, def: 1.1 },
+    { id: "ita_int", name: "إنتر ميلان", short: "INT", color: "#1e3a8a", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/150px-FC_Internazionale_Milano_2021.svg.png", record: "7-4-1", pts: 25, att: 2.4, def: 1.0 },
+    { id: "ita_juv", name: "يوفنتوس", short: "JUV", color: "#1e293b", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Juventus_FC_2017_logo.svg/150px-Juventus_FC_2017_logo.svg.png", record: "6-6-0", pts: 24, att: 1.8, def: 0.5 },
+    { id: "ita_laz", name: "لاتسيو", short: "LAZ", color: "#38bdf8", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/150px-S.S._Lazio_badge.svg.png", record: "8-1-3", pts: 25, att: 2.2, def: 1.2 }
   ],
   "ger.1": [
-    { id: "ger_bay", name: "بايرن ميونخ", short: "BAY", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/150px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png", record: "8-2-0", pts: 26, att: 3.3, def: 0.7 },
-    { id: "ger_rbl", name: "لايبزيغ", short: "RBL", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2014_logo.svg/150px-RB_Leipzig_2014_logo.svg.png", record: "6-3-1", pts: 21, att: 1.9, def: 0.8 },
-    { id: "ger_fra", name: "آينتراخت فرانكفورت", short: "FRA", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/150px-Eintracht_Frankfurt_Logo.svg.png", record: "6-2-2", pts: 20, att: 2.5, def: 1.4 },
-    { id: "ger_lev", name: "باير ليفركوزن", short: "LEV", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/150px-Bayer_04_Leverkusen_logo.svg.png", record: "4-5-1", pts: 17, att: 2.3, def: 1.6 },
-    { id: "ger_dor", name: "بوروسيا دورتموند", short: "BVB", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/150px-Borussia_Dortmund_logo.svg.png", record: "5-1-4", pts: 16, att: 2.1, def: 1.7 }
+    { id: "ger_bay", name: "بايرن ميونخ", short: "BAY", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/150px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png", record: "8-2-0", pts: 26, att: 3.3, def: 0.7 },
+    { id: "ger_rbl", name: "لايبزيغ", short: "RBL", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2014_logo.svg/150px-RB_Leipzig_2014_logo.svg.png", record: "6-3-1", pts: 21, att: 1.9, def: 0.8 },
+    { id: "ger_fra", name: "آينتراخت فرانكفورت", short: "FRA", color: "#1e293b", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/150px-Eintracht_Frankfurt_Logo.svg.png", record: "6-2-2", pts: 20, att: 2.5, def: 1.4 },
+    { id: "ger_lev", name: "باير ليفركوزن", short: "LEV", color: "#b91c1c", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/150px-Bayer_04_Leverkusen_logo.svg.png", record: "4-5-1", pts: 17, att: 2.3, def: 1.6 },
+    { id: "ger_dor", name: "بوروسيا دورتموند", short: "BVB", color: "#eab308", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/150px-Borussia_Dortmund_logo.svg.png", record: "5-1-4", pts: 16, att: 2.1, def: 1.7 }
   ],
   "fra.1": [
-    { id: "fra_psg", name: "باريس سان جيرمان", short: "PSG", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Paris_Saint-Germain_F.C..svg/150px-Paris_Saint-Germain_F.C..svg.png", record: "9-2-0", pts: 29, att: 3.0, def: 0.8 },
-    { id: "fra_mon", name: "موناكو", short: "ASM", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/AS_Monaco_FC.svg/150px-AS_Monaco_FC.svg.png", record: "7-2-2", pts: 23, att: 2.1, def: 0.9 },
-    { id: "fra_mar", name: "مارسيليا", short: "OM", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/150px-Olympique_Marseille_logo.svg.png", record: "6-2-3", pts: 20, att: 2.3, def: 1.3 },
-    { id: "fra_lil", name: "ليل", short: "LOSC", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/LOSC_Lille_Logo.svg/150px-LOSC_Lille_Logo.svg.png", record: "5-4-2", pts: 19, att: 1.7, def: 1.0 }
+    { id: "fra_psg", name: "باريس سان جيرمان", short: "PSG", color: "#1e3a8a", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Paris_Saint-Germain_F.C..svg/150px-Paris_Saint-Germain_F.C..svg.png", record: "9-2-0", pts: 29, att: 3.0, def: 0.8 },
+    { id: "fra_mon", name: "موناكو", short: "ASM", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/AS_Monaco_FC.svg/150px-AS_Monaco_FC.svg.png", record: "7-2-2", pts: 23, att: 2.1, def: 0.9 },
+    { id: "fra_mar", name: "مارسيليا", short: "OM", color: "#0284c7", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/150px-Olympique_Marseille_logo.svg.png", record: "6-2-3", pts: 20, att: 2.3, def: 1.3 },
+    { id: "fra_lil", name: "ليل", short: "LOSC", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/LOSC_Lille_Logo.svg/150px-LOSC_Lille_Logo.svg.png", record: "5-4-2", pts: 19, att: 1.7, def: 1.0 }
   ],
   "caf.champions": [
-    { id: "caf_ahl", name: "الأهلي المصري", short: "AHL", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Al_Ahly_SC_logo.png/150px-Al_Ahly_SC_logo.png", record: "3-1-0", pts: 10, att: 2.4, def: 0.4 },
-    { id: "caf_est", name: "الترجي التونسي", short: "EST", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Esp%C3%A9rance_Sportive_de_Tunis.png/150px-Esp%C3%A9rance_Sportive_de_Tunis.png", record: "3-0-1", pts: 9, att: 2.0, def: 0.5 },
-    { id: "caf_mca", name: "مولودية الجزائر", short: "MCA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Mouloudia_Club_d%27Alger.png/150px-Mouloudia_Club_d%27Alger.png", record: "2-2-0", pts: 8, att: 1.9, def: 0.6 },
-    { id: "caf_rca", name: "الرجاء البيضاوي", short: "RCA", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Raja_Club_Athletic_logo.png/150px-Raja_Club_Athletic_logo.png", record: "2-1-1", pts: 7, att: 1.8, def: 0.7 },
-    { id: "caf_sun", name: "ماميلودي صنداونز", short: "SUN", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Mamelodi_Sundowns_logo.png/150px-Mamelodi_Sundowns_logo.png", record: "3-1-0", pts: 10, att: 2.2, def: 0.6 }
+    { id: "caf_ahl", name: "الأهلي المصري", short: "AHL", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Al_Ahly_SC_logo.png/150px-Al_Ahly_SC_logo.png", record: "3-1-0", pts: 10, att: 2.4, def: 0.4 },
+    { id: "caf_est", name: "الترجي التونسي", short: "EST", color: "#dc2626", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Esp%C3%A9rance_Sportive_de_Tunis.png/150px-Esp%C3%A9rance_Sportive_de_Tunis.png", record: "3-0-1", pts: 9, att: 2.0, def: 0.5 },
+    { id: "caf_mca", name: "مولودية الجزائر", short: "MCA", color: "#047857", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Mouloudia_Club_d%27Alger.png/150px-Mouloudia_Club_d%27Alger.png", record: "2-2-0", pts: 8, att: 1.9, def: 0.6 },
+    { id: "caf_rca", name: "الرجاء البيضاوي", short: "RCA", color: "#059669", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Raja_Club_Athletic_logo.png/150px-Raja_Club_Athletic_logo.png", record: "2-1-1", pts: 7, att: 1.8, def: 0.7 },
+    { id: "caf_sun", name: "ماميلودي صنداونز", short: "SUN", color: "#eab308", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Mamelodi_Sundowns_logo.png/150px-Mamelodi_Sundowns_logo.png", record: "3-1-0", pts: 10, att: 2.2, def: 0.6 }
   ]
 };
+
+// SVG Badge Generator Fallback for 100% Reliable Logos
+function generateBadgeSvg(text, bgHex = '#10b981') {
+  const clean = (text || 'FC').slice(0, 4).toUpperCase();
+  const hex = (bgHex && bgHex.startsWith('#')) ? bgHex : '#10b981';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><defs><linearGradient id="g_${clean}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${hex}"/><stop offset="100%" stop-color="#090e17"/></linearGradient></defs><path d="M32 4 L56 12 L56 34 C56 48 32 60 32 60 C32 60 8 48 8 34 L8 12 Z" fill="url(#g_${clean})" stroke="#ffffff" stroke-width="2.5"/><circle cx="32" cy="24" r="8" fill="rgba(255,255,255,0.25)"/><text x="32" y="44" font-family="Arial,sans-serif" font-weight="900" font-size="12" fill="#ffffff" text-anchor="middle">${clean}</text></svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
 
 // Math Factorial & Poisson helper
 function factorial(n) {
@@ -334,11 +342,18 @@ function clientCalculateAnalytics(home, away) {
       { category: "💎 رهان القيمة (1xBet)", selection: pOver25 > 0.5 ? "+2.5 أهداف" : "+1.5 أهداف", odds_prob: `${Math.round(pOver15 * 100)}%`, description: "معدل تهديف إيجابي متوقع" },
       { category: "🚩 رهان الركنيات الأكيدة", selection: "+8.5 ركنيات", odds_prob: `${pOver85Corners}%`, description: `إجمالي متوقع (${totCorners} ركنية)` },
       { category: "🎯 النتيجة الدقيقة الأرجح", selection: bestScore, odds_prob: `${topScores[0].probability}`, description: `النتيجة البديلة: ${altScore}` }
+    ],
+    tactical_radar: [
+      { label: "القوة الهجومية المتوقعة (xG Attack)", home_val: Math.min(96, Math.max(25, Math.round(lHome * 32))), away_val: Math.min(96, Math.max(25, Math.round(lAway * 32))) },
+      { label: "الصلابة الدفاعية ونظافة الشباك", home_val: Math.min(95, Math.max(25, Math.round((2.0 - homeDef) * 52))), away_val: Math.min(95, Math.max(25, Math.round((2.0 - awayDef) * 52))) },
+      { label: "ضغط الأطراف وصناعة الركنيات", home_val: Math.min(95, Math.max(25, Math.round(baseHCorners * 12.5))), away_val: Math.min(95, Math.max(25, Math.round(baseACorners * 12.5))) },
+      { label: "معدل الحسم واستغلال الفرص", home_val: Math.min(95, Math.max(30, Math.round(homeAtt * 38))), away_val: Math.min(95, Math.max(30, Math.round(awayAtt * 38))) },
+      { label: "مؤشر الفورمة والزخم الأخير", home_val: Math.min(98, Math.max(35, pctHome + 28)), away_val: Math.min(98, Math.max(35, pctAway + 28)) }
     ]
   };
 }
 
-// Generate client fixtures for any league and date
+// Generate client fixtures for any league and date (kickoffs in Algeria Time UTC+1)
 function clientGenerateFixtures(leagueSlug, dateStr) {
   if (leagueSlug === "all") {
     let allMatches = [];
@@ -356,7 +371,8 @@ function clientGenerateFixtures(leagueSlug, dateStr) {
   const nMatches = Math.min(4, Math.floor(teams.length / 2));
   const matches = [];
 
-  const hours = ["15:00", "17:30", "19:00", "21:00"];
+  const algeriaKickoffs = ["15:00", "17:30", "19:00", "21:00"];
+  const utcKickoffs = ["14:00", "16:30", "18:00", "20:00"];
 
   for (let i = 0; i < nMatches; i++) {
     const hIdx = (i * 2 + (seed % 3)) % teams.length;
@@ -372,14 +388,15 @@ function clientGenerateFixtures(leagueSlug, dateStr) {
       league_slug: leagueSlug,
       league_name: leagueInfo.name,
       league_flag: leagueInfo.flag,
-      date: `${dateStr.slice(0,4)}-${dateStr.slice(4,6)}-${dateStr.slice(6,8)}T${hours[i % hours.length]}:00Z`,
+      date: `${dateStr.slice(0,4)}-${dateStr.slice(4,6)}-${dateStr.slice(6,8)}T${utcKickoffs[i % utcKickoffs.length]}:00Z`,
       name: `${home.name} vs ${away.name}`,
       status: "Scheduled",
-      status_detail: hours[i % hours.length],
+      status_detail: `${algeriaKickoffs[i % algeriaKickoffs.length]} بتوقيت الجزائر`,
+      algeria_time: `${algeriaKickoffs[i % algeriaKickoffs.length]} (GMT+1)`,
       is_live: false,
       is_completed: false,
-      home: { id: home.id, name: home.name, short_name: home.short, logo: home.logo, score: "", record: home.record },
-      away: { id: away.id, name: away.name, short_name: away.short, logo: away.logo, score: "", record: away.record },
+      home: { id: home.id, name: home.name, short_name: home.short, logo: home.logo, color: home.color || '#059669', score: "", record: home.record },
+      away: { id: away.id, name: away.name, short_name: away.short, logo: away.logo, color: away.color || '#3b82f6', score: "", record: away.record },
       quick_prediction: {
         winner: an.prediction.winner,
         confidence: an.prediction.confidence,
